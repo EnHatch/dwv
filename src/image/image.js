@@ -1,17 +1,17 @@
-import {Index} from '../math/index';
-import {Point3D} from '../math/point';
-import {logger} from '../utils/logger';
-import {getTypedArray} from '../dicom/dicomParser';
-import {ListenerHandler} from '../utils/listen';
-import {colourRange} from './iterator';
-import {RescaleSlopeAndIntercept} from './rsi';
-import {ImageFactory} from './imageFactory';
-import {MaskFactory} from './maskFactory';
+import { Index } from "../math/index";
+import { Point3D } from "../math/point";
+import { logger } from "../utils/logger";
+import { getTypedArray } from "../dicom/dicomParser";
+import { ListenerHandler } from "../utils/listen";
+import { colourRange } from "./iterator";
+import { RescaleSlopeAndIntercept } from "./rsi";
+import { ImageFactory } from "./imageFactory";
+import { MaskFactory } from "./maskFactory";
 
 // doc imports
 /* eslint-disable no-unused-vars */
-import {Geometry} from './geometry';
-import {Matrix33} from '../math/matrix';
+import { Geometry } from "./geometry";
+import { Matrix33 } from "../math/matrix";
 /* eslint-enable no-unused-vars */
 
 /**
@@ -32,7 +32,7 @@ function getSliceIndex(volumeGeometry, sliceGeometry) {
   // z
   values.push(volumeGeometry.getSliceIndex(sliceGeometry.getOrigin(), timeId));
   // time
-  if (typeof timeId !== 'undefined') {
+  if (typeof timeId !== "undefined") {
     values.push(timeId);
   }
   // return index
@@ -47,11 +47,7 @@ function getSliceIndex(volumeGeometry, sliceGeometry) {
  */
 export function createImage(elements) {
   const factory = new ImageFactory();
-  return factory.create(
-    elements,
-    elements['7FE00010'].value[0],
-    1
-  );
+  return factory.create(elements, elements["7FE00010"].value[0], 1);
 }
 
 /**
@@ -62,10 +58,7 @@ export function createImage(elements) {
  */
 export function createMaskImage(elements) {
   const factory = new MaskFactory();
-  return factory.create(
-    elements,
-    elements['7FE00010'].value[0]
-  );
+  return factory.create(elements, elements["7FE00010"].value[0]);
 }
 
 /**
@@ -107,7 +100,6 @@ export function createMaskImage(elements) {
  * request.send();
  */
 export class Image {
-
   /**
    * Data geometry.
    *
@@ -172,7 +164,7 @@ export class Image {
    *
    * @type {string}
    */
-  #photometricInterpretation = 'MONOCHROME2';
+  #photometricInterpretation = "MONOCHROME2";
 
   /**
    * Planar configuration for RGB data (0:RGBRGBRGBRGB... or
@@ -234,8 +226,8 @@ export class Image {
     this.#buffer = buffer;
     this.#imageUids = imageUids;
 
-    this.#numberOfComponents = this.#buffer.length / (
-      this.#geometry.getSize().getTotalSize());
+    this.#numberOfComponents =
+      this.#buffer.length / this.#geometry.getSize().getTotalSize();
   }
 
   /**
@@ -246,7 +238,7 @@ export class Image {
    */
   getImageUid(index) {
     let uid = this.#imageUids[0];
-    if (this.#imageUids.length !== 1 && typeof index !== 'undefined') {
+    if (this.#imageUids.length !== 1 && typeof index !== "undefined") {
       uid = this.#imageUids[this.getSecondaryOffset(index)];
     }
     return uid;
@@ -286,8 +278,7 @@ export class Image {
    * @returns {boolean} True if the data is monochrome.
    */
   canWindowLevel() {
-    return this.getPhotometricInterpretation()
-      .match(/MONOCHROME/) !== null;
+    return this.getPhotometricInterpretation().match(/MONOCHROME/) !== null;
   }
 
   /**
@@ -301,7 +292,7 @@ export class Image {
     const size = this.getGeometry().getSize();
     // also check the numberOfFiles in case we are in the middle of a load
     let nFiles = 1;
-    if (typeof this.#meta.numberOfFiles !== 'undefined') {
+    if (typeof this.#meta.numberOfFiles !== "undefined") {
       nFiles = this.#meta.numberOfFiles;
     }
     return size.canScroll(viewOrientation) || nFiles !== 1;
@@ -336,14 +327,14 @@ export class Image {
   getRescaleSlopeAndIntercept(index) {
     let res = this.#rsi;
     if (!this.isConstantRSI()) {
-      if (typeof index === 'undefined') {
-        throw new Error('Cannot get non constant RSI with empty slice index.');
+      if (typeof index === "undefined") {
+        throw new Error("Cannot get non constant RSI with empty slice index.");
       }
       const offset = this.getSecondaryOffset(index);
-      if (typeof this.#rsis[offset] !== 'undefined') {
+      if (typeof this.#rsis[offset] !== "undefined") {
         res = this.#rsis[offset];
       } else {
-        logger.warn('undefined non constant rsi at ' + offset);
+        logger.warn("undefined non constant rsi at " + offset);
       }
     }
     return res;
@@ -370,14 +361,15 @@ export class Image {
     this.#isIdentityRSI = this.#isIdentityRSI && inRsi.isID();
     // update constant flag
     if (!this.#isConstantRSI) {
-      if (typeof offset === 'undefined') {
+      if (typeof offset === "undefined") {
         throw new Error(
-          'Cannot store non constant RSI with empty slice index.');
+          "Cannot store non constant RSI with empty slice index."
+        );
       }
       this.#rsis.splice(offset, 0, inRsi);
     } else {
       if (!this.#rsi.equals(inRsi)) {
-        if (typeof offset === 'undefined') {
+        if (typeof offset === "undefined") {
           // no slice index, replace existing
           this.#rsi = inRsi;
         } else {
@@ -499,8 +491,10 @@ export class Image {
     // value to array
     if (this.#numberOfComponents === 1) {
       value = [value];
-    } else if (this.#numberOfComponents === 3 &&
-      typeof value.r !== 'undefined') {
+    } else if (
+      this.#numberOfComponents === 3 &&
+      typeof value.r !== "undefined"
+    ) {
       value = [value.r, value.g, value.b];
     }
     // main loop
@@ -531,8 +525,7 @@ export class Image {
    */
   hasValues(values) {
     // check input
-    if (typeof values === 'undefined' ||
-      values.length === 0) {
+    if (typeof values === "undefined" || values.length === 0) {
       return [];
     }
     // final array value
@@ -541,11 +534,7 @@ export class Image {
       if (this.#numberOfComponents === 1) {
         finalValues.push([values[v1]]);
       } else if (this.#numberOfComponents === 3) {
-        finalValues.push([
-          values[v1].r,
-          values[v1].g,
-          values[v1].b
-        ]);
+        finalValues.push([values[v1].r, values[v1].g, values[v1].b]);
       }
     }
     // find callback
@@ -556,9 +545,7 @@ export class Image {
       };
     } else if (this.#numberOfComponents === 3) {
       equalFunc = function (a, b) {
-        return a[0] === b[0] &&
-          a[1] === b[1] &&
-          a[2] === b[2];
+        return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
       };
     }
     const getEqualCallback = function (value) {
@@ -572,8 +559,11 @@ export class Image {
     const valuesToFind = finalValues.slice();
     let equal;
     let indicesToRemove;
-    for (let i = 0, leni = this.#buffer.length;
-      i < leni; i = i + this.#numberOfComponents) {
+    for (
+      let i = 0, leni = this.#buffer.length;
+      i < leni;
+      i = i + this.#numberOfComponents
+    ) {
       indicesToRemove = [];
       for (let v = 0; v < valuesToFind.length; ++v) {
         equal = true;
@@ -587,7 +577,8 @@ export class Image {
         // if found, store answer and add to indices to remove
         if (equal) {
           const valIndex = finalValues.findIndex(
-            getEqualCallback(valuesToFind[v]));
+            getEqualCallback(valuesToFind[v])
+          );
           res[valIndex] = true;
           indicesToRemove.push(v);
         }
@@ -621,7 +612,9 @@ export class Image {
     } else {
       for (let i = 0; i < this.#getSecondaryOffsetMax(); ++i) {
         copy.setRescaleSlopeAndIntercept(
-          this.#getRescaleSlopeAndInterceptAtOffset(i), i);
+          this.#getRescaleSlopeAndInterceptAtOffset(i),
+          i
+        );
       }
     }
     // copy extras
@@ -644,9 +637,10 @@ export class Image {
     this.#buffer = getTypedArray(
       this.#buffer.BYTES_PER_ELEMENT * 8,
       this.#meta.IsSigned ? 1 : 0,
-      size);
+      size
+    );
     if (this.#buffer === null) {
-      throw new Error('Cannot reallocate data for image.');
+      throw new Error("Cannot reallocate data for image.");
     }
     // put old in new
     this.#buffer.set(tmpBuffer);
@@ -662,36 +656,44 @@ export class Image {
   appendSlice(rhs) {
     // check input
     if (rhs === null) {
-      throw new Error('Cannot append null slice');
+      throw new Error("Cannot append null slice");
     }
     const rhsSize = rhs.getGeometry().getSize();
     let size = this.#geometry.getSize();
     if (rhsSize.get(2) !== 1) {
-      throw new Error('Cannot append more than one slice');
+      throw new Error("Cannot append more than one slice");
     }
     if (size.get(0) !== rhsSize.get(0)) {
-      throw new Error('Cannot append a slice with different number of columns');
+      throw new Error("Cannot append a slice with different number of columns");
     }
     if (size.get(1) !== rhsSize.get(1)) {
-      throw new Error('Cannot append a slice with different number of rows');
+      throw new Error("Cannot append a slice with different number of rows");
     }
-    if (!this.#geometry.getOrientation().equals(
-      rhs.getGeometry().getOrientation(), 0.0001)) {
-      throw new Error('Cannot append a slice with different orientation');
+    if (
+      !this.#geometry
+        .getOrientation()
+        .equals(rhs.getGeometry().getOrientation(), 0.0001)
+    ) {
+      throw new Error("Cannot append a slice with different orientation");
     }
-    if (this.#photometricInterpretation !==
-      rhs.getPhotometricInterpretation()) {
+    if (
+      this.#photometricInterpretation !== rhs.getPhotometricInterpretation()
+    ) {
       throw new Error(
-        'Cannot append a slice with different photometric interpretation');
+        "Cannot append a slice with different photometric interpretation"
+      );
     }
     // all meta should be equal
     for (const key in this.#meta) {
-      if (key === 'windowPresets' || key === 'numberOfFiles' ||
-        key === 'custom') {
+      if (
+        key === "windowPresets" ||
+        key === "numberOfFiles" ||
+        key === "custom"
+      ) {
         continue;
       }
-      if (this.#meta[key] !== rhs.getMeta()[key]) {
-        throw new Error('Cannot append a slice with different ' + key);
+      if (this.#meta[key] !== rhs.getMeta()[key] && key !== "sopInstanceUid") {
+        throw new Error("Cannot append a slice with different " + key);
       }
     }
 
@@ -700,8 +702,10 @@ export class Image {
 
     // append frame if needed
     let isNewFrame = false;
-    if (typeof timeId !== 'undefined' &&
-      !this.#geometry.hasSlicesAtTime(timeId)) {
+    if (
+      typeof timeId !== "undefined" &&
+      !this.#geometry.hasSlicesAtTime(timeId)
+    ) {
       // update grometry
       this.appendFrame(timeId, rhs.getGeometry().getOrigin());
       // update size
@@ -717,8 +721,8 @@ export class Image {
     const sliceSize = this.#numberOfComponents * size.getDimSize(2);
 
     // create full buffer if not done yet
-    if (typeof this.#meta.numberOfFiles === 'undefined') {
-      throw new Error('Missing number of files for buffer manipulation.');
+    if (typeof this.#meta.numberOfFiles === "undefined") {
+      throw new Error("Missing number of files for buffer manipulation.");
     }
     const fullBufferSize = sliceSize * this.#meta.numberOfFiles;
     if (this.#buffer.length !== fullBufferSize) {
@@ -730,7 +734,7 @@ export class Image {
 
     // slice index including possible 4D
     let fullSliceIndex = sliceIndex;
-    if (typeof timeId !== 'undefined') {
+    if (typeof timeId !== "undefined") {
       fullSliceIndex +=
         this.#geometry.getCurrentNumberOfSlicesBeforeTime(timeId);
     }
@@ -751,12 +755,17 @@ export class Image {
     // update geometry
     if (!isNewFrame) {
       this.#geometry.appendOrigin(
-        rhs.getGeometry().getOrigin(), sliceIndex, timeId);
+        rhs.getGeometry().getOrigin(),
+        sliceIndex,
+        timeId
+      );
     }
     // update rsi
     // (rhs should just have one rsi)
     this.setRescaleSlopeAndIntercept(
-      rhs.getRescaleSlopeAndIntercept(), fullSliceIndex);
+      rhs.getRescaleSlopeAndIntercept(),
+      fullSliceIndex
+    );
 
     // current number of images
     const numberOfImages = this.#imageUids.length;
@@ -765,7 +774,7 @@ export class Image {
     this.#imageUids.splice(fullSliceIndex, 0, rhs.getImageUid());
 
     // update window presets
-    if (typeof this.#meta.windowPresets !== 'undefined') {
+    if (typeof this.#meta.windowPresets !== "undefined") {
       const windowPresets = this.#meta.windowPresets;
       const rhsPresets = rhs.getMeta().windowPresets;
       const keys = Object.keys(rhsPresets);
@@ -774,10 +783,12 @@ export class Image {
         pkey = keys[i];
         const rhsPreset = rhsPresets[pkey];
         const windowPreset = windowPresets[pkey];
-        if (typeof windowPreset !== 'undefined') {
+        if (typeof windowPreset !== "undefined") {
           // if not set or false, check perslice
-          if (typeof windowPreset.perslice === 'undefined' ||
-            windowPreset.perslice === false) {
+          if (
+            typeof windowPreset.perslice === "undefined" ||
+            windowPreset.perslice === false
+          ) {
             // if different preset.wl, mark it as perslice
             if (!windowPreset.wl[0].equals(rhsPreset.wl[0])) {
               windowPreset.perslice = true;
@@ -789,10 +800,11 @@ export class Image {
             }
           }
           // store (first) rhs preset.wl if needed
-          if (typeof windowPreset.perslice !== 'undefined' &&
-            windowPreset.perslice === true) {
-            windowPresets[pkey].wl.splice(
-              fullSliceIndex, 0, rhsPreset.wl[0]);
+          if (
+            typeof windowPreset.perslice !== "undefined" &&
+            windowPreset.perslice === true
+          ) {
+            windowPresets[pkey].wl.splice(fullSliceIndex, 0, rhsPreset.wl[0]);
           }
         } else {
           // if not defined (it should be), store all
@@ -812,8 +824,8 @@ export class Image {
     // create full buffer if not done yet
     const size = this.#geometry.getSize();
     const frameSize = this.#numberOfComponents * size.getDimSize(2);
-    if (typeof this.#meta.numberOfFiles === 'undefined') {
-      throw new Error('Missing number of files for frame buffer manipulation.');
+    if (typeof this.#meta.numberOfFiles === "undefined") {
+      throw new Error("Missing number of files for frame buffer manipulation.");
     }
     const fullBufferSize = frameSize * this.#meta.numberOfFiles;
     if (this.#buffer.length !== fullBufferSize) {
@@ -821,8 +833,13 @@ export class Image {
     }
     // check index
     if (frameIndex >= this.#meta.numberOfFiles) {
-      logger.warn('Ignoring frame at index ' + frameIndex +
-        ' (size: ' + this.#meta.numberOfFiles + ')');
+      logger.warn(
+        "Ignoring frame at index " +
+          frameIndex +
+          " (size: " +
+          this.#meta.numberOfFiles +
+          ")"
+      );
       return;
     }
     // append
@@ -839,7 +856,7 @@ export class Image {
    */
   appendFrame(time, origin) {
     this.#geometry.appendFrame(origin, time);
-    this.#fireEvent({type: 'appendframe'});
+    this.#fireEvent({ type: "appendframe" });
     // memory will be updated at the first appendSlice or appendFrameBuffer
   }
 
@@ -933,7 +950,7 @@ export class Image {
       this.#buffer[offset + 2] = value.b;
     }
     // fire imagechange
-    this.#fireEvent({type: 'imagechange'});
+    this.#fireEvent({ type: "imagechange" });
   }
 
   /**
@@ -956,29 +973,31 @@ export class Image {
       let previousColour = {
         r: this.#buffer[offset],
         g: this.#buffer[offset + 1],
-        b: this.#buffer[offset + 2]
+        b: this.#buffer[offset + 2],
       };
       // original value storage
       const originalColours = [];
       originalColours.push({
         index: 0,
-        colour: previousColour
+        colour: previousColour,
       });
       for (let i = 0; i < offsets.length; ++i) {
         offset = offsets[i] * 3;
         const currentColour = {
           r: this.#buffer[offset],
           g: this.#buffer[offset + 1],
-          b: this.#buffer[offset + 2]
+          b: this.#buffer[offset + 2],
         };
         // check if new colour
-        if (previousColour.r !== currentColour.r ||
+        if (
+          previousColour.r !== currentColour.r ||
           previousColour.g !== currentColour.g ||
-          previousColour.b !== currentColour.b) {
+          previousColour.b !== currentColour.b
+        ) {
           // store new colour
           originalColours.push({
             index: i,
-            colour: currentColour
+            colour: currentColour,
           });
           previousColour = currentColour;
         }
@@ -990,7 +1009,7 @@ export class Image {
       originalColoursLists.push(originalColours);
     }
     // fire imagechange
-    this.#fireEvent({type: 'imagechange'});
+    this.#fireEvent({ type: "imagechange" });
     return originalColoursLists;
   }
 
@@ -1005,16 +1024,13 @@ export class Image {
     for (let j = 0; j < offsetsLists.length; ++j) {
       const offsets = offsetsLists[j];
       let iterator;
-      if (typeof value !== 'undefined' &&
-        typeof value.r !== 'undefined') {
+      if (typeof value !== "undefined" && typeof value.r !== "undefined") {
         // input value is a simple color
-        iterator = colourRange(
-          [{index: 0, colour: value}], offsets.length);
+        iterator = colourRange([{ index: 0, colour: value }], offsets.length);
       } else {
         // input value is a list of iterators
         // created by setAtOffsetsAndGetOriginals
-        iterator = colourRange(
-          value[j], offsets.length);
+        iterator = colourRange(value[j], offsets.length);
       }
 
       // set values
@@ -1033,7 +1049,7 @@ export class Image {
      * @event Image#imagechange
      * @type {object}
      */
-    this.#fireEvent({type: 'imagechange'});
+    this.#fireEvent({ type: "imagechange" });
   }
 
   /**
@@ -1047,10 +1063,11 @@ export class Image {
    * Warning: No size check...
    */
   getValue(i, j, k, f) {
-    const frame = (f || 0);
+    const frame = f || 0;
     const index = new Index([i, j, k, frame]);
     return this.getValueAtOffset(
-      this.getGeometry().getSize().indexToOffset(index));
+      this.getGeometry().getSize().indexToOffset(index)
+    );
   }
 
   /**
@@ -1062,7 +1079,8 @@ export class Image {
    */
   getValueAtIndex(index) {
     return this.getValueAtOffset(
-      this.getGeometry().getSize().indexToOffset(index));
+      this.getGeometry().getSize().indexToOffset(index)
+    );
   }
 
   /**
@@ -1076,7 +1094,7 @@ export class Image {
    * Warning: No size check...
    */
   getRescaledValue(i, j, k, f) {
-    if (typeof f === 'undefined') {
+    if (typeof f === "undefined") {
       f = 0;
     }
     let val = this.getValue(i, j, k, f);
@@ -1151,7 +1169,7 @@ export class Image {
       }
     }
     // return
-    return {min: min, max: max};
+    return { min: min, max: max };
   }
 
   /**
@@ -1168,8 +1186,8 @@ export class Image {
       const resmin = this.getRescaleSlopeAndIntercept().apply(range.min);
       const resmax = this.getRescaleSlopeAndIntercept().apply(range.max);
       return {
-        min: ((resmin < resmax) ? resmin : resmax),
-        max: ((resmin > resmax) ? resmin : resmax)
+        min: resmin < resmax ? resmin : resmax,
+        max: resmin > resmax ? resmin : resmax,
       };
     } else {
       let rmin = this.getRescaledValueAtOffset(0);
@@ -1191,7 +1209,7 @@ export class Image {
         }
       }
       // return
-      return {min: rmin, max: rmax};
+      return { min: rmin, max: rmax };
     }
   }
 
@@ -1227,18 +1245,18 @@ export class Image {
       histo[rvalue] = (histo[rvalue] || 0) + 1;
     }
     // set data range
-    const dataRange = {min: min, max: max};
-    const rescaledDataRange = {min: rmin, max: rmax};
+    const dataRange = { min: min, max: max };
+    const rescaledDataRange = { min: rmin, max: rmax };
     // generate data for plotting
     const histogram = [];
     for (let b = rmin; b <= rmax; ++b) {
-      histogram.push([b, (histo[b] || 0)]);
+      histogram.push([b, histo[b] || 0]);
     }
     // return
     return {
       dataRange: dataRange,
       rescaledDataRange: rescaledDataRange,
-      histogram: histogram
+      histogram: histogram,
     };
   }
 
@@ -1253,8 +1271,9 @@ export class Image {
   convolute2D(weights) {
     if (weights.length !== 9) {
       throw new Error(
-        'The convolution matrix does not have a length of 9; it has ' +
-        weights.length);
+        "The convolution matrix does not have a length of 9; it has " +
+          weights.length
+      );
     }
 
     const newImage = this.clone();
@@ -1278,8 +1297,7 @@ export class Image {
    * @param {TypedArray} buffer The buffer to convolute.
    * @param {number} startOffset The index to start at.
    */
-  convoluteBuffer(
-    weights, buffer, startOffset) {
+  convoluteBuffer(weights, buffer, startOffset) {
     const imgSize = this.getGeometry().getSize();
     const ncols = imgSize.get(0);
     const nrows = imgSize.get(1);
@@ -1302,13 +1320,13 @@ export class Image {
     // default weight offset matrix
     const wOff = [];
     wOff[0] = (-ncols - 1) * factor;
-    wOff[1] = (-ncols) * factor;
+    wOff[1] = -ncols * factor;
     wOff[2] = (-ncols + 1) * factor;
     wOff[3] = -factor;
     wOff[4] = 0;
     wOff[5] = 1 * factor;
     wOff[6] = (ncols - 1) * factor;
-    wOff[7] = (ncols) * factor;
+    wOff[7] = ncols * factor;
     wOff[8] = (ncols + 1) * factor;
 
     // border weight offset matrices
@@ -1316,47 +1334,95 @@ export class Image {
 
     // i=0, j=0
     const wOff00 = [];
-    wOff00[0] = wOff[4]; wOff00[1] = wOff[4]; wOff00[2] = wOff[5];
-    wOff00[3] = wOff[4]; wOff00[4] = wOff[4]; wOff00[5] = wOff[5];
-    wOff00[6] = wOff[7]; wOff00[7] = wOff[7]; wOff00[8] = wOff[8];
+    wOff00[0] = wOff[4];
+    wOff00[1] = wOff[4];
+    wOff00[2] = wOff[5];
+    wOff00[3] = wOff[4];
+    wOff00[4] = wOff[4];
+    wOff00[5] = wOff[5];
+    wOff00[6] = wOff[7];
+    wOff00[7] = wOff[7];
+    wOff00[8] = wOff[8];
     // i=0, j=*
     const wOff0x = [];
-    wOff0x[0] = wOff[1]; wOff0x[1] = wOff[1]; wOff0x[2] = wOff[2];
-    wOff0x[3] = wOff[4]; wOff0x[4] = wOff[4]; wOff0x[5] = wOff[5];
-    wOff0x[6] = wOff[7]; wOff0x[7] = wOff[7]; wOff0x[8] = wOff[8];
+    wOff0x[0] = wOff[1];
+    wOff0x[1] = wOff[1];
+    wOff0x[2] = wOff[2];
+    wOff0x[3] = wOff[4];
+    wOff0x[4] = wOff[4];
+    wOff0x[5] = wOff[5];
+    wOff0x[6] = wOff[7];
+    wOff0x[7] = wOff[7];
+    wOff0x[8] = wOff[8];
     // i=0, j=nrows
     const wOff0n = [];
-    wOff0n[0] = wOff[1]; wOff0n[1] = wOff[1]; wOff0n[2] = wOff[2];
-    wOff0n[3] = wOff[4]; wOff0n[4] = wOff[4]; wOff0n[5] = wOff[5];
-    wOff0n[6] = wOff[4]; wOff0n[7] = wOff[4]; wOff0n[8] = wOff[5];
+    wOff0n[0] = wOff[1];
+    wOff0n[1] = wOff[1];
+    wOff0n[2] = wOff[2];
+    wOff0n[3] = wOff[4];
+    wOff0n[4] = wOff[4];
+    wOff0n[5] = wOff[5];
+    wOff0n[6] = wOff[4];
+    wOff0n[7] = wOff[4];
+    wOff0n[8] = wOff[5];
 
     // i=*, j=0
     const wOffx0 = [];
-    wOffx0[0] = wOff[3]; wOffx0[1] = wOff[4]; wOffx0[2] = wOff[5];
-    wOffx0[3] = wOff[3]; wOffx0[4] = wOff[4]; wOffx0[5] = wOff[5];
-    wOffx0[6] = wOff[6]; wOffx0[7] = wOff[7]; wOffx0[8] = wOff[8];
+    wOffx0[0] = wOff[3];
+    wOffx0[1] = wOff[4];
+    wOffx0[2] = wOff[5];
+    wOffx0[3] = wOff[3];
+    wOffx0[4] = wOff[4];
+    wOffx0[5] = wOff[5];
+    wOffx0[6] = wOff[6];
+    wOffx0[7] = wOff[7];
+    wOffx0[8] = wOff[8];
     // i=*, j=* -> wOff
     // i=*, j=nrows
     const wOffxn = [];
-    wOffxn[0] = wOff[0]; wOffxn[1] = wOff[1]; wOffxn[2] = wOff[2];
-    wOffxn[3] = wOff[3]; wOffxn[4] = wOff[4]; wOffxn[5] = wOff[5];
-    wOffxn[6] = wOff[3]; wOffxn[7] = wOff[4]; wOffxn[8] = wOff[5];
+    wOffxn[0] = wOff[0];
+    wOffxn[1] = wOff[1];
+    wOffxn[2] = wOff[2];
+    wOffxn[3] = wOff[3];
+    wOffxn[4] = wOff[4];
+    wOffxn[5] = wOff[5];
+    wOffxn[6] = wOff[3];
+    wOffxn[7] = wOff[4];
+    wOffxn[8] = wOff[5];
 
     // i=ncols, j=0
     const wOffn0 = [];
-    wOffn0[0] = wOff[3]; wOffn0[1] = wOff[4]; wOffn0[2] = wOff[4];
-    wOffn0[3] = wOff[3]; wOffn0[4] = wOff[4]; wOffn0[5] = wOff[4];
-    wOffn0[6] = wOff[6]; wOffn0[7] = wOff[7]; wOffn0[8] = wOff[7];
+    wOffn0[0] = wOff[3];
+    wOffn0[1] = wOff[4];
+    wOffn0[2] = wOff[4];
+    wOffn0[3] = wOff[3];
+    wOffn0[4] = wOff[4];
+    wOffn0[5] = wOff[4];
+    wOffn0[6] = wOff[6];
+    wOffn0[7] = wOff[7];
+    wOffn0[8] = wOff[7];
     // i=ncols, j=*
     const wOffnx = [];
-    wOffnx[0] = wOff[0]; wOffnx[1] = wOff[1]; wOffnx[2] = wOff[1];
-    wOffnx[3] = wOff[3]; wOffnx[4] = wOff[4]; wOffnx[5] = wOff[4];
-    wOffnx[6] = wOff[6]; wOffnx[7] = wOff[7]; wOffnx[8] = wOff[7];
+    wOffnx[0] = wOff[0];
+    wOffnx[1] = wOff[1];
+    wOffnx[2] = wOff[1];
+    wOffnx[3] = wOff[3];
+    wOffnx[4] = wOff[4];
+    wOffnx[5] = wOff[4];
+    wOffnx[6] = wOff[6];
+    wOffnx[7] = wOff[7];
+    wOffnx[8] = wOff[7];
     // i=ncols, j=nrows
     const wOffnn = [];
-    wOffnn[0] = wOff[0]; wOffnn[1] = wOff[1]; wOffnn[2] = wOff[1];
-    wOffnn[3] = wOff[3]; wOffnn[4] = wOff[4]; wOffnn[5] = wOff[4];
-    wOffnn[6] = wOff[3]; wOffnn[7] = wOff[4]; wOffnn[8] = wOff[4];
+    wOffnn[0] = wOff[0];
+    wOffnn[1] = wOff[1];
+    wOffnn[2] = wOff[1];
+    wOffnn[3] = wOff[3];
+    wOffnn[4] = wOff[4];
+    wOffnn[5] = wOff[4];
+    wOffnn[6] = wOff[3];
+    wOffnn[7] = wOff[4];
+    wOffnn[8] = wOff[4];
 
     // restore indent for rest of method
     /*jshint indent:4 */
@@ -1374,27 +1440,27 @@ export class Image {
           // special border cases
           if (i === 0 && j === 0) {
             wOffFinal = wOff00;
-          } else if (i === 0 && j === (nrows - 1)) {
+          } else if (i === 0 && j === nrows - 1) {
             wOffFinal = wOff0n;
-          } else if (i === (ncols - 1) && j === 0) {
+          } else if (i === ncols - 1 && j === 0) {
             wOffFinal = wOffn0;
-          } else if (i === (ncols - 1) && j === (nrows - 1)) {
+          } else if (i === ncols - 1 && j === nrows - 1) {
             wOffFinal = wOffnn;
-          } else if (i === 0 && j !== (nrows - 1) && j !== 0) {
+          } else if (i === 0 && j !== nrows - 1 && j !== 0) {
             wOffFinal = wOff0x;
-          } else if (i === (ncols - 1) && j !== (nrows - 1) && j !== 0) {
+          } else if (i === ncols - 1 && j !== nrows - 1 && j !== 0) {
             wOffFinal = wOffnx;
-          } else if (i !== 0 && i !== (ncols - 1) && j === 0) {
+          } else if (i !== 0 && i !== ncols - 1 && j === 0) {
             wOffFinal = wOffx0;
-          } else if (i !== 0 && i !== (ncols - 1) && j === (nrows - 1)) {
+          } else if (i !== 0 && i !== ncols - 1 && j === nrows - 1) {
             wOffFinal = wOffxn;
           }
           // calculate the weighed sum of the source image pixels that
           // fall under the convolution matrix
           newValue = 0;
           for (let wi = 0; wi < 9; ++wi) {
-            newValue += this.getValueAtOffset(
-              pixelOffset + wOffFinal[wi]) * weights[wi];
+            newValue +=
+              this.getValueAtOffset(pixelOffset + wOffFinal[wi]) * weights[wi];
           }
           buffer[pixelOffset] = newValue;
           // increment pixel offset
@@ -1442,5 +1508,4 @@ export class Image {
     }
     return newImage;
   }
-
 } // class Image
