@@ -683,16 +683,18 @@ export class Image {
         "Cannot append a slice with different photometric interpretation"
       );
     }
+    console.log("SOP INSTANCE UID &&&&&&");
     // all meta should be equal
     for (const key in this.#meta) {
       if (
         key === "windowPresets" ||
         key === "numberOfFiles" ||
-        key === "custom"
+        key === "custom" ||
+        key === "sopInstanceUid"
       ) {
         continue;
       }
-      if (this.#meta[key] !== rhs.getMeta()[key] && key !== "sopInstanceUid") {
+      if (this.#meta[key] !== rhs.getMeta()[key]) {
         throw new Error("Cannot append a slice with different " + key);
       }
     }
