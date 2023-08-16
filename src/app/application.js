@@ -1431,6 +1431,8 @@ export class App {
       drawLayer.addFlipOffsetX();
     }
 
+    layerGroup.flipScaleZ();
+
     // viewLayer.addFlipOffsetY();
     // if (typeof drawLayer !== "undefined") {
     //   drawLayer.addFlipOffsetY();
