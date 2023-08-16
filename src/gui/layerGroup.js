@@ -855,6 +855,11 @@ export class LayerGroup {
     this.setScale(this.#baseScale);
   }
 
+  flipScaleX() {
+    this.#baseScale.x *= -1;
+    this.setScale(this.#baseScale);
+  }
+
   /**
    * Add scale to the layers. Scale cannot go lower than 0.1.
    *

@@ -1717,6 +1717,7 @@ export declare class LayerGroup {
      */
     flipScaleZ(): void;
     flipScaleY(): void;
+    flipScaleX(): void;
     /**
      * Add scale to the layers. Scale cannot go lower than 0.1.
      *

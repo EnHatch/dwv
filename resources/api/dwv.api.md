@@ -287,6 +287,8 @@ export class LayerGroup {
     draw(): void;
     empty(): void;
     // (undocumented)
+    flipScaleX(): void;
+    // (undocumented)
     flipScaleY(): void;
     flipScaleZ(): void;
     getActiveDrawLayer(): DrawLayer;
