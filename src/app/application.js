@@ -1396,7 +1396,7 @@ export class App {
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
     console.log(
-      "APPLICATION FLIP IMAGE &&&&& ",
+      "APPLICATION FLIP IMAGE &&&&& lmrlmrlmr",
       dataViewConfig,
       majorIndex,
       isBaseLayer,
@@ -1425,8 +1425,6 @@ export class App {
     //     }
     //   }
     // }
-
-    layerGroup.flipScaleZ();
 
     // view layer scale
     // only flip scale for base layers
