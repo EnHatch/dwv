@@ -106,6 +106,12 @@ export class ImageFactory {
         colCosines.getZ(),
         normal.getZ(),
       ]);
+
+      console.log(
+        "ORIENTATION &&&&& ",
+        imageOrientationPatient,
+        orientationMatrix
+      );
       /* eslint-enable array-element-newline */
     }
 
