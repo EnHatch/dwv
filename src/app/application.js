@@ -1405,9 +1405,9 @@ export class App {
       orientation.get(2, 1)
     );
 
-    viewLayer.addFlipOffsetY();
+    viewLayer.addFlipOffsetZ();
     if (typeof drawLayer !== "undefined") {
-      drawLayer.addFlipOffsetY();
+      drawLayer.addFlipOffsetZ();
     }
 
     // extra flip offset for oriented views...
