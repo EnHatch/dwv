@@ -1392,7 +1392,12 @@ export class App {
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
-    console.log("APPLICATION FLIP IMAGE &&&&& ", dataViewConfig);
+    console.log(
+      "APPLICATION FLIP IMAGE &&&&& ",
+      dataViewConfig,
+      major,
+      isBaseLayer
+    );
     // extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== "undefined") {
       if (major === 2) {
