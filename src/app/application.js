@@ -1436,8 +1436,8 @@ export class App {
     // layerGroup.flipScaleY();
 
     //z major axis
-    layerGroup.flipScaleZ();
-    //layerGroup.flipScaleY();
+    //layerGroup.flipScaleZ();
+    layerGroup.flipScaleY();
 
     // view layer scale
     // only flip scale for base layers
