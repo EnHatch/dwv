@@ -1405,56 +1405,66 @@ export class App {
       orientation.get(2, 1)
     );
 
-    // extra flip offset for oriented views...
-    // if (typeof dataViewConfig.orientation !== "undefined") {
-    //   if (majorIndex === 2) {
-    //     // flip offset Y for axial aquired data
-    //     if (dataViewConfig.orientation !== "axial") {
-    //       viewLayer.addFlipOffsetY();
-    //       if (typeof drawLayer !== "undefined") {
-    //         drawLayer.addFlipOffsetY();
-    //       }
-    //     }
-    //   } else if (majorIndex === 0) {
-    //     // flip offset X for sagittal aquired data
-    //     if (dataViewConfig.orientation !== "sagittal") {
-    //       viewLayer.addFlipOffsetX();
-    //       if (typeof drawLayer !== "undefined") {
-    //         drawLayer.addFlipOffsetX();
-    //       }
-    //     }
-    //   }
-    // }
+    //extra flip offset for oriented views...
+    if (typeof dataViewConfig.orientation !== "undefined") {
+      if (majorIndex === 2) {
+        // flip offset Y for axial aquired data
+        if (dataViewConfig.orientation !== "axial") {
+          viewLayer.addFlipOffsetY();
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.addFlipOffsetY();
+          }
+        }
+      } else if (majorIndex === 0) {
+        // flip offset X for sagittal aquired data
+        if (dataViewConfig.orientation !== "sagittal") {
+          viewLayer.addFlipOffsetX();
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.addFlipOffsetX();
+          }
+        }
+      }
+    }
+
+    viewLayer.addFlipOffsetX();
+    if (typeof drawLayer !== "undefined") {
+      drawLayer.addFlipOffsetX();
+    }
+
+    viewLayer.addFlipOffsetXY();
+    if (typeof drawLayer !== "undefined") {
+      drawLayer.addFlipOffsetY();
+    }
 
     // view layer scale
     // only flip scale for base layers
-    // if (isBaseLayer) {
-    //   if (typeof dataViewConfig.orientation !== "undefined") {
-    //     if (majorIndex === 0 || majorIndex === 2) {
-    //       // scale flip Z for oriented views...
-    //       layerGroup.flipScaleZ();
-    //     } else {
-    //       viewLayer.setScale(layerGroup.getScale());
-    //       if (typeof drawLayer !== "undefined") {
-    //         drawLayer.setScale(layerGroup.getScale());
-    //       }
-    //     }
-    //   } else {
-    //     if (majorIndex === 0) {
-    //       // scale flip Z for sagittal and undefined target orientation
-    //       layerGroup.flipScaleZ();
-    //     } else {
-    //       viewLayer.setScale(layerGroup.getScale());
-    //       if (typeof drawLayer !== "undefined") {
-    //         drawLayer.setScale(layerGroup.getScale());
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   viewLayer.setScale(layerGroup.getScale());
-    //   if (typeof drawLayer !== "undefined") {
-    //     drawLayer.setScale(layerGroup.getScale());
-    //   }
-    // }
+    if (isBaseLayer) {
+      if (typeof dataViewConfig.orientation !== "undefined") {
+        if (majorIndex === 0 || majorIndex === 2) {
+          // scale flip Z for oriented views...
+          layerGroup.flipScaleZ();
+        } else {
+          viewLayer.setScale(layerGroup.getScale());
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.setScale(layerGroup.getScale());
+          }
+        }
+      } else {
+        if (majorIndex === 0) {
+          // scale flip Z for sagittal and undefined target orientation
+          layerGroup.flipScaleZ();
+        } else {
+          viewLayer.setScale(layerGroup.getScale());
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.setScale(layerGroup.getScale());
+          }
+        }
+      }
+    } else {
+      viewLayer.setScale(layerGroup.getScale());
+      if (typeof drawLayer !== "undefined") {
+        drawLayer.setScale(layerGroup.getScale());
+      }
+    }
   }
 } // class App
