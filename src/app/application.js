@@ -1396,7 +1396,8 @@ export class App {
       "APPLICATION FLIP IMAGE &&&&& ",
       dataViewConfig,
       major,
-      isBaseLayer
+      isBaseLayer,
+      imageGeometry.getOrientation()
     );
     // extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== "undefined") {
