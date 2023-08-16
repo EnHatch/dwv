@@ -1418,6 +1418,11 @@ export class App {
           }
         }
       }
+    } else {
+      viewLayer.addFlipOffsetX();
+      if (typeof drawLayer !== "undefined") {
+        drawLayer.addFlipOffsetX();
+      }
     }
 
     // view layer scale
@@ -1437,7 +1442,6 @@ export class App {
         if (major === 0) {
           // scale flip Z for sagittal and undefined target orientation
           layerGroup.flipScaleZ();
-          layerGroup.addFlipOffsetX();
         } else {
           viewLayer.setScale(layerGroup.getScale());
           if (typeof drawLayer !== "undefined") {
