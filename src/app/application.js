@@ -1405,11 +1405,6 @@ export class App {
       orientation.get(2, 1)
     );
 
-    viewLayer.addFlipOffsetZ();
-    if (typeof drawLayer !== "undefined") {
-      drawLayer.addFlipOffsetZ();
-    }
-
     // extra flip offset for oriented views...
     // if (typeof dataViewConfig.orientation !== "undefined") {
     //   if (majorIndex === 2) {
