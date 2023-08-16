@@ -1418,11 +1418,6 @@ export class App {
           }
         }
       }
-    } else {
-      viewLayer.addFlipOffsetX();
-      if (typeof drawLayer !== "undefined") {
-        drawLayer.addFlipOffsetX();
-      }
     }
 
     // view layer scale
