@@ -1423,6 +1423,22 @@ export class App {
           }
         }
       }
+    } else {
+      if (majorIndex === 0) {
+        if (orientation.get(1, 1) < 0 || orientation.get(0, 1) < 0) {
+          viewLayer.addFlipOffsetX();
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.addFlipOffsetX();
+          }
+        }
+
+        if (orientation.get(1, 2) < 0 || orientation.get(0, 2) < 0) {
+          viewLayer.addFlipOffsetY();
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.addFlipOffsetY();
+          }
+        }
+      }
     }
 
     // view layer scale
