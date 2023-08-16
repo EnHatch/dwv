@@ -1426,10 +1426,10 @@ export class App {
       }
     }
 
-    viewLayer.addFlipOffsetX();
-    if (typeof drawLayer !== "undefined") {
-      drawLayer.addFlipOffsetX();
-    }
+    // viewLayer.addFlipOffsetX();
+    // if (typeof drawLayer !== "undefined") {
+    //   drawLayer.addFlipOffsetX();
+    // }
     layerGroup.flipScaleZ();
     layerGroup.flipScaleY();
 
