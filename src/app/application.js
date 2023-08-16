@@ -1426,12 +1426,12 @@ export class App {
       }
     }
 
-    layerGroup.flipScaleZ();
-    layerGroup.flipScaleY();
     viewLayer.addFlipOffsetX();
     if (typeof drawLayer !== "undefined") {
       drawLayer.addFlipOffsetX();
     }
+    layerGroup.flipScaleZ();
+    layerGroup.flipScaleY();
 
     // view layer scale
     // only flip scale for base layers
