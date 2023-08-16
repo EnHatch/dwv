@@ -1430,8 +1430,14 @@ export class App {
     // if (typeof drawLayer !== "undefined") {
     //   drawLayer.addFlipOffsetX();
     // }
+
+    //works for x major axis
+    // layerGroup.flipScaleZ();
+    // layerGroup.flipScaleY();
+
+    //z major axis
     layerGroup.flipScaleZ();
-    layerGroup.flipScaleY();
+    //layerGroup.flipScaleY();
 
     // view layer scale
     // only flip scale for base layers
