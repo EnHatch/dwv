@@ -1426,42 +1426,42 @@ export class App {
       }
     }
 
+    layerGroup.flipScaleZ();
+    layerGroup.flipScaleY();
     viewLayer.addFlipOffsetX();
     if (typeof drawLayer !== "undefined") {
       drawLayer.addFlipOffsetX();
     }
 
-    layerGroup.flipScaleY();
-
     // view layer scale
     // only flip scale for base layers
-    if (isBaseLayer) {
-      if (typeof dataViewConfig.orientation !== "undefined") {
-        if (majorIndex === 0 || majorIndex === 2) {
-          // scale flip Z for oriented views...
-          layerGroup.flipScaleZ();
-        } else {
-          viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== "undefined") {
-            drawLayer.setScale(layerGroup.getScale());
-          }
-        }
-      } else {
-        if (majorIndex === 0) {
-          // scale flip Z for sagittal and undefined target orientation
-          layerGroup.flipScaleZ();
-        } else {
-          viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== "undefined") {
-            drawLayer.setScale(layerGroup.getScale());
-          }
-        }
-      }
-    } else {
-      viewLayer.setScale(layerGroup.getScale());
-      if (typeof drawLayer !== "undefined") {
-        drawLayer.setScale(layerGroup.getScale());
-      }
-    }
+    // if (isBaseLayer) {
+    //   if (typeof dataViewConfig.orientation !== "undefined") {
+    //     if (majorIndex === 0 || majorIndex === 2) {
+    //       // scale flip Z for oriented views...
+    //       layerGroup.flipScaleZ();
+    //     } else {
+    //       viewLayer.setScale(layerGroup.getScale());
+    //       if (typeof drawLayer !== "undefined") {
+    //         drawLayer.setScale(layerGroup.getScale());
+    //       }
+    //     }
+    //   } else {
+    //     if (majorIndex === 0) {
+    //       // scale flip Z for sagittal and undefined target orientation
+    //       layerGroup.flipScaleZ();
+    //     } else {
+    //       viewLayer.setScale(layerGroup.getScale());
+    //       if (typeof drawLayer !== "undefined") {
+    //         drawLayer.setScale(layerGroup.getScale());
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   viewLayer.setScale(layerGroup.getScale());
+    //   if (typeof drawLayer !== "undefined") {
+    //     drawLayer.setScale(layerGroup.getScale());
+    //   }
+    // }
   }
 } // class App
