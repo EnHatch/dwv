@@ -1431,10 +1431,10 @@ export class App {
       drawLayer.addFlipOffsetX();
     }
 
-    viewLayer.addFlipOffsetY();
-    if (typeof drawLayer !== "undefined") {
-      drawLayer.addFlipOffsetY();
-    }
+    // viewLayer.addFlipOffsetY();
+    // if (typeof drawLayer !== "undefined") {
+    //   drawLayer.addFlipOffsetY();
+    // }
 
     // view layer scale
     // only flip scale for base layers
