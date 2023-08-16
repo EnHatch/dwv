@@ -1400,7 +1400,9 @@ export class App {
       dataViewConfig,
       majorIndex,
       isBaseLayer,
-      imageGeometry.getOrientation()
+      orientation,
+      orientation.get(2, 0),
+      orientation.get(2, 1)
     );
     // extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== "undefined") {
@@ -1412,7 +1414,7 @@ export class App {
             drawLayer.addFlipOffsetY();
           }
         }
-      } else if (majorIndex === 0 && majorValue < 0) {
+      } else if (majorIndex === 0) {
         // flip offset X for sagittal aquired data
         if (dataViewConfig.orientation !== "sagittal") {
           viewLayer.addFlipOffsetX();
