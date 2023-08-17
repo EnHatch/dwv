@@ -1,7 +1,7 @@
-import {Vector3D} from './vector';
-import {Point3D} from './point';
-import {Index} from './index';
-import {logger} from '../utils/logger';
+import { Vector3D } from "./vector";
+import { Point3D } from "./point";
+import { Index } from "./index";
+import { logger } from "../utils/logger";
 
 // Number.EPSILON is difference between 1 and the smallest
 // floating point number greater than 1
@@ -21,7 +21,7 @@ export const REAL_WORLD_EPSILON = 1e-4;
  * @returns {boolean} True if similar.
  */
 export function isSimilar(a, b, tol) {
-  if (typeof tol === 'undefined') {
+  if (typeof tol === "undefined") {
     tol = Number.EPSILON;
   }
   return Math.abs(a - b) < tol;
@@ -31,7 +31,6 @@ export function isSimilar(a, b, tol) {
  * Immutable 3x3 Matrix.
  */
 export class Matrix33 {
-
   /**
    * Matrix values.
    *
@@ -71,7 +70,7 @@ export class Matrix33 {
    *   if the determinant is zero.
    */
   getInverse() {
-    if (typeof this.#inverse === 'undefined') {
+    if (typeof this.#inverse === "undefined") {
       this.#inverse = getMatrixInverse(this);
     }
     return this.#inverse;
@@ -104,19 +103,19 @@ export class Matrix33 {
    * @returns {string} The matrix as a string.
    */
   toString() {
-    let str = '[';
+    let str = "[";
     for (let i = 0; i < 3; ++i) {
       if (i !== 0) {
-        str += ', \n ';
+        str += ", \n ";
       }
       for (let j = 0; j < 3; ++j) {
         if (j !== 0) {
-          str += ', ';
+          str += ", ";
         }
         str += this.get(i, j);
       }
     }
-    str += ']';
+    str += "]";
     return str;
   }
 
@@ -163,8 +162,9 @@ export class Matrix33 {
    */
   multiplyArray3D(array3D) {
     if (array3D.length !== 3) {
-      throw new Error('Cannot multiply 3x3 matrix with non 3D array: ' +
-        array3D.length);
+      throw new Error(
+        "Cannot multiply 3x3 matrix with non 3D array: " + array3D.length
+      );
     }
     const values = [];
     for (let i = 0; i < 3; ++i) {
@@ -184,9 +184,11 @@ export class Matrix33 {
    * @returns {Vector3D} The result 3D vector.
    */
   multiplyVector3D(vector3D) {
-    const array3D = this.multiplyArray3D(
-      [vector3D.getX(), vector3D.getY(), vector3D.getZ()]
-    );
+    const array3D = this.multiplyArray3D([
+      vector3D.getX(),
+      vector3D.getY(),
+      vector3D.getZ(),
+    ]);
     return new Vector3D(array3D[0], array3D[1], array3D[2]);
   }
 
@@ -197,9 +199,11 @@ export class Matrix33 {
    * @returns {Point3D} The result 3D point.
    */
   multiplyPoint3D(point3D) {
-    const array3D = this.multiplyArray3D(
-      [point3D.getX(), point3D.getY(), point3D.getZ()]
-    );
+    const array3D = this.multiplyArray3D([
+      point3D.getX(),
+      point3D.getY(),
+      point3D.getZ(),
+    ]);
     return new Point3D(array3D[0], array3D[1], array3D[2]);
   }
 
@@ -224,13 +228,13 @@ export class Matrix33 {
     const values = [
       Math.abs(this.get(row, 0)),
       Math.abs(this.get(row, 1)),
-      Math.abs(this.get(row, 2))
+      Math.abs(this.get(row, 2)),
     ];
     const absMax = Math.max.apply(null, values);
     const index = values.indexOf(absMax);
     return {
       value: this.get(row, index),
-      index: index
+      index: index,
     };
   }
 
@@ -244,13 +248,14 @@ export class Matrix33 {
     const values = [
       Math.abs(this.get(0, col)),
       Math.abs(this.get(1, col)),
-      Math.abs(this.get(2, col))
+      Math.abs(this.get(2, col)),
     ];
     const absMax = Math.max.apply(null, values);
     const index = values.indexOf(absMax);
+    console.log("VALUES &&&& ", this, values, absMax, index);
     return {
       value: this.get(index, col),
-      index: index
+      index: index,
     };
   }
 
@@ -284,7 +289,6 @@ export class Matrix33 {
   getThirdColMajorDirection() {
     return this.getColAbsMax(2).index;
   }
-
 } // Matrix33
 
 /**
@@ -313,7 +317,7 @@ function getMatrixInverse(m) {
 
   let det = m00 * a1212 + m01 * a2012 + m02 * a0112;
   if (det === 0) {
-    logger.warn('Cannot invert 3*3 matrix with zero determinant.');
+    logger.warn("Cannot invert 3*3 matrix with zero determinant.");
     return undefined;
   }
   det = 1 / det;
@@ -327,7 +331,7 @@ function getMatrixInverse(m) {
     det * (m02 * m10 - m00 * m12),
     det * a0112,
     det * (m01 * m20 - m00 * m21),
-    det * (m00 * m11 - m01 * m10)
+    det * (m00 * m11 - m01 * m10),
   ];
 
   return new Matrix33(values);
@@ -340,11 +344,7 @@ function getMatrixInverse(m) {
  */
 export function getIdentityMat33() {
   /* eslint-disable array-element-newline */
-  return new Matrix33([
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, 1
-  ]);
+  return new Matrix33([1, 0, 0, 0, 1, 0, 0, 0, 1]);
   /* eslint-enable array-element-newline */
 }
 
@@ -365,11 +365,7 @@ export function isIdentityMat33(mat33) {
  */
 export function getCoronalMat33() {
   /* eslint-disable array-element-newline */
-  return new Matrix33([
-    1, 0, 0,
-    0, 0, 1,
-    0, -1, 0
-  ]);
+  return new Matrix33([1, 0, 0, 0, 0, 1, 0, -1, 0]);
   /* eslint-enable array-element-newline */
 }
 
@@ -380,11 +376,7 @@ export function getCoronalMat33() {
  */
 export function getSagittalMat33() {
   /* eslint-disable array-element-newline */
-  return new Matrix33([
-    0, 0, -1,
-    1, 0, 0,
-    0, -1, 0
-  ]);
+  return new Matrix33([0, 0, -1, 1, 0, 0, 0, -1, 0]);
   /* eslint-enable array-element-newline */
 }
 
@@ -396,11 +388,11 @@ export function getSagittalMat33() {
  */
 export function getMatrixFromName(name) {
   let matrix = null;
-  if (name === 'axial') {
+  if (name === "axial") {
     matrix = getIdentityMat33();
-  } else if (name === 'coronal') {
+  } else if (name === "coronal") {
     matrix = getCoronalMat33();
-  } else if (name === 'sagittal') {
+  } else if (name === "sagittal") {
     matrix = getSagittalMat33();
   }
   return matrix;
