@@ -1429,28 +1429,16 @@ export class App {
         }
       } else {
         const orientation = imageGeometry.getOrientation();
-        if (
-          orientation.get(0, 0) < 0 ||
-          orientation.get(0, 1) < 0 ||
-          orientation.get(0, 2) < 0
-        ) {
+        if (orientation.get(0, 0) < 0 || orientation.get(0, 1) < 0) {
           layerGroup.flipScaleX();
           console.log("FLIP X &&&&& ", orientation);
         }
 
-        if (
-          orientation.get(1, 0) < 0 ||
-          orientation.get(1, 1) < 0 ||
-          orientation.get(1, 2) < 0
-        ) {
+        if (orientation.get(1, 0) < 0 || orientation.get(1, 1) < 0) {
           layerGroup.flipScaleY();
           console.log("FLIP Y &&&&& ", orientation);
         }
-        if (
-          orientation.get(2, 0) < 0 ||
-          orientation.get(2, 1) < 0 ||
-          orientation.get(2, 2) < 0
-        ) {
+        if (orientation.get(2, 0) < 0 || orientation.get(2, 1) < 0) {
           layerGroup.flipScaleZ();
           console.log("FLIP Z &&&&& ", orientation);
         }
