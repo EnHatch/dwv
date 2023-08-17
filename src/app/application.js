@@ -1501,40 +1501,40 @@ export class App {
       } else {
         if (
           orientation.get(0, 0) < 0 ||
-          orientation.get(1, 0) < 0 ||
-          orientation.get(2, 0) < 0
+          orientation.get(0, 1) < 0 ||
+          orientation.get(0, 2) < 0
         ) {
           console.log(
             "FLIP X &&&& ",
             orientation.get(0, 0),
-            orientation.get(1, 0),
-            orientation.get(2, 0)
+            orientation.get(0, 1),
+            orientation.get(0, 2)
           );
           layerGroup.flipScaleX();
         }
 
         if (
-          orientation.get(0, 1) < 0 ||
+          orientation.get(1, 0) < 0 ||
           orientation.get(1, 1) < 0 ||
-          orientation.get(2, 1) < 0
+          orientation.get(1, 2) < 0
         ) {
           console.log(
             "FLIP Y &&&& ",
-            orientation.get(0, 1),
+            orientation.get(1, 0),
             orientation.get(1, 1),
-            orientation.get(2, 1)
+            orientation.get(1, 2)
           );
           layerGroup.flipScaleY();
         }
         if (
-          orientation.get(0, 2) < 0 ||
-          orientation.get(1, 2) < 0 ||
+          orientation.get(2, 0) < 0 ||
+          orientation.get(2, 1) < 0 ||
           orientation.get(2, 2) < 0
         ) {
           console.log(
             "FLIP Z &&&& ",
-            orientation.get(0, 2),
-            orientation.get(1, 2),
+            orientation.get(2, 0),
+            orientation.get(2, 1),
             orientation.get(2, 2)
           );
           layerGroup.flipScaleZ();
