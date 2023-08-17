@@ -1429,6 +1429,23 @@ export class App {
         }
       } else {
         const orientation = imageGeometry.getOrientation();
+        console.log(
+          "IF X &&&&& ",
+          orientation.get(0, 0),
+          orientation.get(0, 1),
+          orientation.get(0, 2),
+          "IF Y &&&&& ",
+          orientation.get(1, 0),
+          orientation.get(1, 1),
+          orientation.get(1, 2),
+          "IF Z &&&&& ",
+          orientation.get(2, 0),
+          orientation.get(2, 1),
+          orientation.get(2, 2),
+          "ORIENTATION &&&&",
+          orientation
+        );
+
         if (orientation.get(0, 0) < 0 || orientation.get(0, 1) < 0) {
           layerGroup.flipScaleX();
           console.log("FLIP X &&&&& ", orientation);
