@@ -1453,25 +1453,35 @@ export class App {
           }
         }
       } else {
+        if (orientation.get(0, 1) < 0 || orientation.get(1, 1) < 0) {
+          console.log(
+            "FLIP Y &&&& ",
+            orientation.get(0, 1),
+            orientation.get(1, 1)
+          );
+          layerGroup.flipScaleY();
+        }
+        if (orientation.get(0, 2) < 0 || orientation.get(1, 2) < 0) {
+          console.log(
+            "FLIP Z &&&& ",
+            orientation.get(0, 2),
+            orientation.get(1, 2)
+          );
+          layerGroup.flipScaleZ();
+        }
+
+        if (orientation.get(0, 0) < 0 || orientation.get(1, 0) < 0) {
+          console.log(
+            "FLIP X &&&& ",
+            orientation.get(0, 2),
+            orientation.get(1, 2)
+          );
+          layerGroup.flipScaleX();
+        }
+
         if (majorIndex === 0) {
-          if (orientation.get(0, 1) < 0 || orientation.get(1, 1) < 0) {
-            console.log(
-              "FLIP Y &&&& ",
-              orientation.get(0, 1),
-              orientation.get(1, 1)
-            );
-            layerGroup.flipScaleY();
-          }
-          if (orientation.get(0, 2) < 0 || orientation.get(1, 2) < 0) {
-            console.log(
-              "FLIP Z &&&& ",
-              orientation.get(0, 2),
-              orientation.get(1, 2)
-            );
-            layerGroup.flipScaleZ();
-          }
-          // // scale flip Z for sagittal and undefined target orientation
-          // layerGroup.flipScaleZ();
+          // scale flip Z for sagittal and undefined target orientation
+          //layerGroup.flipScaleZ();
         } else {
           viewLayer.setScale(layerGroup.getScale());
           if (typeof drawLayer !== "undefined") {

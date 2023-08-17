@@ -1716,7 +1716,13 @@ export declare class LayerGroup {
      * Flip all layers along the Z axis without offset compensation.
      */
     flipScaleZ(): void;
+    /**
+     * Flip all layers along the Y axis without offset compensation.
+     */
     flipScaleY(): void;
+    /**
+     * Flip all layers along the X axis without offset compensation.
+     */
     flipScaleX(): void;
     /**
      * Add scale to the layers. Scale cannot go lower than 0.1.

@@ -850,11 +850,17 @@ export class LayerGroup {
     this.setScale(this.#baseScale);
   }
 
+  /**
+   * Flip all layers along the Y axis without offset compensation.
+   */
   flipScaleY() {
     this.#baseScale.y *= -1;
     this.setScale(this.#baseScale);
   }
 
+  /**
+   * Flip all layers along the X axis without offset compensation.
+   */
   flipScaleX() {
     this.#baseScale.x *= -1;
     this.setScale(this.#baseScale);
