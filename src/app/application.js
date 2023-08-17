@@ -1461,7 +1461,8 @@ export class App {
         if (
           orientation.get(1, 0) < 0 ||
           orientation.get(1, 1) < 0 ||
-          orientation.get(1, 2) < 0
+          orientation.get(1, 2) < 0 ||
+          true
         ) {
           layerGroup.flipScaleY();
           console.log("FLIP Y &&&&& ", orientation);
