@@ -1388,33 +1388,14 @@ export class App {
     this.#stage.syncLayerGroupScale();
 
     // major orientation axis
-    const orientation = imageGeometry.getOrientation();
-    const thirdColAbsoluteMax = orientation.getColAbsMax(2);
-    const majorIndex = thirdColAbsoluteMax.index;
-    const majorValue = thirdColAbsoluteMax.value;
+    const major = imageGeometry.getOrientation().getThirdColMajorDirection();
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
-    console.log(
-      "APPLICATION FLIP IMAGE &&&&& lmrlmrlmr",
-      dataViewConfig,
-      thirdColAbsoluteMax,
-      isBaseLayer,
-      orientation,
-      orientation.get(0, 0),
-      orientation.get(1, 0),
-      orientation.get(2, 0),
-      orientation.get(0, 1),
-      orientation.get(1, 1),
-      orientation.get(2, 1),
-      orientation.get(0, 2),
-      orientation.get(1, 2),
-      orientation.get(2, 2)
-    );
 
     //extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== "undefined") {
-      if (majorIndex === 2) {
+      if (major === 2) {
         // flip offset Y for axial aquired data
         if (dataViewConfig.orientation !== "axial") {
           viewLayer.addFlipOffsetY();
@@ -1422,7 +1403,7 @@ export class App {
             drawLayer.addFlipOffsetY();
           }
         }
-      } else if (majorIndex === 0) {
+      } else if (major === 0) {
         // flip offset X for sagittal aquired data
         if (dataViewConfig.orientation !== "sagittal") {
           viewLayer.addFlipOffsetX();
@@ -1433,63 +1414,11 @@ export class App {
       }
     }
 
-    // viewLayer.addFlipOffsetX();
-    // if (typeof drawLayer !== "undefined") {
-    //   drawLayer.addFlipOffsetX();
-    // }
-
-    // //works for x major axis
-    // layerGroup.flipScaleZ();
-    // layerGroup.flipScaleY();
-    //   [
-    //     "0.0",
-    //     "-1.0",
-    //     "0.0",
-    //     "0.0",
-    //     "0.0",
-    //     "-1.0"
-    // ]
-    //   [
-    //     0,
-    //     0,
-    //     1,
-    //     -1,
-    //     0,
-    //     0,
-    //     0,
-    //     -1,
-    //     0
-    // ]
-    //row * 3 + col
-
-    // //z major axis
-    // layerGroup.flipScaleX();
-    // layerGroup.flipScaleY();
-    //   [
-    //     "-1",
-    //     "0",
-    //     "0",
-    //     "0",
-    //     "-1",
-    //     "0"
-    // ]
-    //   [
-    //     -1,
-    //     0,
-    //     0,
-    //     0,
-    //     -1,
-    //     0,
-    //     0,
-    //     0,
-    //     1
-    // ]
-
     // view layer scale
     // only flip scale for base layers
     if (isBaseLayer) {
       if (typeof dataViewConfig.orientation !== "undefined") {
-        if (majorIndex === 0 || majorIndex === 2) {
+        if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
           layerGroup.flipScaleZ();
         } else {
@@ -1499,18 +1428,14 @@ export class App {
           }
         }
       } else {
+        const orientation = imageGeometry.getOrientation();
         if (
           orientation.get(0, 0) < 0 ||
           orientation.get(0, 1) < 0 ||
           orientation.get(0, 2) < 0
         ) {
-          console.log(
-            "FLIP X &&&& ",
-            orientation.get(0, 0),
-            orientation.get(0, 1),
-            orientation.get(0, 2)
-          );
           layerGroup.flipScaleX();
+          console.log("FLIP X &&&&& ", orientation);
         }
 
         if (
@@ -1518,29 +1443,19 @@ export class App {
           orientation.get(1, 1) < 0 ||
           orientation.get(1, 2) < 0
         ) {
-          console.log(
-            "FLIP Y &&&& ",
-            orientation.get(1, 0),
-            orientation.get(1, 1),
-            orientation.get(1, 2)
-          );
           layerGroup.flipScaleY();
+          console.log("FLIP Y &&&&& ", orientation);
         }
         if (
           orientation.get(2, 0) < 0 ||
           orientation.get(2, 1) < 0 ||
           orientation.get(2, 2) < 0
         ) {
-          console.log(
-            "FLIP Z &&&& ",
-            orientation.get(2, 0),
-            orientation.get(2, 1),
-            orientation.get(2, 2)
-          );
           layerGroup.flipScaleZ();
+          console.log("FLIP Z &&&&& ", orientation);
         }
 
-        if (majorIndex === 0) {
+        if (major === 0) {
           // scale flip Z for sagittal and undefined target orientation
           //layerGroup.flipScaleZ();
         } else {

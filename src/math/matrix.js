@@ -252,7 +252,6 @@ export class Matrix33 {
     ];
     const absMax = Math.max.apply(null, values);
     const index = values.indexOf(absMax);
-    console.log("VALUES &&&& ", this, values, absMax, index);
     return {
       value: this.get(index, col),
       index: index,
