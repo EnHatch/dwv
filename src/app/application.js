@@ -1388,7 +1388,10 @@ export class App {
     this.#stage.syncLayerGroupScale();
 
     // major orientation axis
-    const major = imageGeometry.getOrientation().getThirdColMajorDirection();
+    const orientation = imageGeometry.getOrientation();
+    const thirdColAbsMax = orientation.getColAbsMax(2);
+    const major = thirdColAbsMax.index;
+    console.log("THIRD COL ABS MAX &&&&& ", thirdColAbsMax);
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
@@ -1428,7 +1431,6 @@ export class App {
           }
         }
       } else {
-        const orientation = imageGeometry.getOrientation();
         console.log(
           "IF X &&&&& ",
           orientation.get(0, 0),
@@ -1447,35 +1449,34 @@ export class App {
           major
         );
 
+        if (
+          orientation.get(0, 0) < 0 ||
+          orientation.get(0, 1) < 0 ||
+          orientation.get(0, 2) < 0
+        ) {
+          layerGroup.flipScaleX();
+          console.log("FLIP X &&&&& ", orientation);
+        }
+
+        if (
+          orientation.get(1, 0) < 0 ||
+          orientation.get(1, 1) < 0 ||
+          orientation.get(1, 2) < 0
+        ) {
+          layerGroup.flipScaleY();
+          console.log("FLIP Y &&&&& ", orientation);
+        }
+
+        if (
+          orientation.get(2, 0) < 0 ||
+          orientation.get(2, 1) < 0 ||
+          orientation.get(2, 2) < 0
+        ) {
+          layerGroup.flipScaleZ();
+          console.log("FLIP Z &&&&& ", orientation);
+        }
+
         if (major === 0) {
-          if (
-            orientation.get(0, 0) < 0 ||
-            orientation.get(0, 1) < 0 ||
-            orientation.get(0, 2) < 0
-          ) {
-            layerGroup.flipScaleX();
-            console.log("FLIP X &&&&& ", orientation);
-          }
-
-          if (
-            orientation.get(1, 0) < 0 ||
-            orientation.get(1, 1) < 0 ||
-            orientation.get(1, 2) < 0
-          ) {
-            layerGroup.flipScaleY();
-            console.log("FLIP Y &&&&& ", orientation);
-          }
-
-          if (
-            orientation.get(2, 0) < 0 ||
-            orientation.get(2, 1) < 0 ||
-            orientation.get(2, 2) < 0
-          ) {
-            layerGroup.flipScaleZ();
-            console.log("FLIP Z &&&&& ", orientation);
-          }
-          // scale flip Z for sagittal and undefined target orientation
-          //layerGroup.flipScaleZ();
         } else {
           viewLayer.setScale(layerGroup.getScale());
           if (typeof drawLayer !== "undefined") {
