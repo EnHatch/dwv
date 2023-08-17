@@ -1455,10 +1455,11 @@ export class App {
           layerGroup.flipScaleY();
           console.log("FLIP Y &&&&& ", orientation);
         }
-        if (orientation.get(2, 0) < 0 || orientation.get(2, 1) < 0) {
-          layerGroup.flipScaleZ();
-          console.log("FLIP Z &&&&& ", orientation);
-        }
+
+        // if (orientation.get(2, 0) < 0 || orientation.get(2, 1) < 0) {
+        //   layerGroup.flipScaleZ();
+        //   console.log("FLIP Z &&&&& ", orientation);
+        // }
 
         if (major === 0) {
           // scale flip Z for sagittal and undefined target orientation
