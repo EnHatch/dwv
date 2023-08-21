@@ -1478,10 +1478,10 @@ export class App {
 
         if (major === 0) {
         } else {
-          viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== "undefined") {
-            drawLayer.setScale(layerGroup.getScale());
-          }
+          // viewLayer.setScale(layerGroup.getScale());
+          // if (typeof drawLayer !== "undefined") {
+          //   drawLayer.setScale(layerGroup.getScale());
+          // }
         }
       }
     } else {
