@@ -1391,7 +1391,6 @@ export class App {
     const orientation = imageGeometry.getOrientation();
     const thirdColAbsMax = orientation.getColAbsMax(2);
     const major = thirdColAbsMax.index;
-    console.log("THIRD COL ABS MAX &&&&& ", thirdColAbsMax);
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
@@ -1431,57 +1430,35 @@ export class App {
           }
         }
       } else {
-        console.log(
-          "IF X &&&&& ",
-          orientation.get(0, 0),
-          orientation.get(0, 1),
-          orientation.get(0, 2),
-          "IF Y &&&&& ",
-          orientation.get(1, 0),
-          orientation.get(1, 1),
-          orientation.get(1, 2),
-          "IF Z &&&&& ",
-          orientation.get(2, 0),
-          orientation.get(2, 1),
-          orientation.get(2, 2),
-          "ORIENTATION &&&&",
-          orientation,
-          major
-        );
+        if (major === 0 || major === 2) {
+          if (
+            orientation.get(0, 0) < 0 ||
+            orientation.get(0, 1) < 0 ||
+            orientation.get(0, 2) < 0
+          ) {
+            layerGroup.flipScaleX();
+          }
 
-        // if (
-        //   orientation.get(0, 0) < 0 ||
-        //   orientation.get(0, 1) < 0 ||
-        //   orientation.get(0, 2) < 0
-        // ) {
-        //   layerGroup.flipScaleX();
-        //   console.log("FLIP X &&&&& ", orientation);
-        // }
+          if (
+            orientation.get(1, 0) < 0 ||
+            orientation.get(1, 1) < 0 ||
+            orientation.get(1, 2) < 0
+          ) {
+            layerGroup.flipScaleY();
+          }
 
-        // if (
-        //   orientation.get(1, 0) < 0 ||
-        //   orientation.get(1, 1) < 0 ||
-        //   orientation.get(1, 2) < 0
-        // ) {
-        //   layerGroup.flipScaleY();
-        //   console.log("FLIP Y &&&&& ", orientation);
-        // }
-
-        // if (
-        //   orientation.get(2, 0) < 0 ||
-        //   orientation.get(2, 1) < 0 ||
-        //   orientation.get(2, 2) < 0
-        // ) {
-        //   layerGroup.flipScaleZ();
-        //   console.log("FLIP Z &&&&& ", orientation);
-        // }
-
-        if (major === 0) {
+          if (
+            orientation.get(2, 0) < 0 ||
+            orientation.get(2, 1) < 0 ||
+            orientation.get(2, 2) < 0
+          ) {
+            layerGroup.flipScaleZ();
+          }
         } else {
-          // viewLayer.setScale(layerGroup.getScale());
-          // if (typeof drawLayer !== "undefined") {
-          //   drawLayer.setScale(layerGroup.getScale());
-          // }
+          viewLayer.setScale(layerGroup.getScale());
+          if (typeof drawLayer !== "undefined") {
+            drawLayer.setScale(layerGroup.getScale());
+          }
         }
       }
     } else {
