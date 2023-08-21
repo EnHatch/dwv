@@ -286,6 +286,8 @@ export class LayerGroup {
     display(flag: boolean): void;
     draw(): void;
     empty(): void;
+    flipScaleX(): void;
+    flipScaleY(): void;
     flipScaleZ(): void;
     getActiveDrawLayer(): DrawLayer;
     getActiveViewLayer(): ViewLayer;
