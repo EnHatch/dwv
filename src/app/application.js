@@ -1430,6 +1430,7 @@ export class App {
           }
         }
       } else {
+        console.log("ENHATCH MODIFICATIONS &&&&&");
         if (major === 0 || major === 2) {
           if (
             orientation.get(0, 0) < 0 ||
