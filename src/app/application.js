@@ -1536,9 +1536,9 @@ export class App {
     viewLayer.setOffset(layerGroup.getOffset());
     // extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== 'undefined') {
-      viewLayer.addFlipOffsetY();
+      viewLayer.addFlipOffsetZ();
       if (typeof drawLayer !== 'undefined') {
-        drawLayer.addFlipOffsetY();
+        drawLayer.addFlipOffsetZ();
       }
       // if (major === 2) {
       //   // flip offset Y for axial aquired data
