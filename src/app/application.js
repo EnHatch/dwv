@@ -1577,7 +1577,17 @@ export class App {
           imageOrientationPatient
         );
 
-        layerGroup.flipScaleX();
+        if (newMajor === 0) {
+          layerGroup.flipScaleX();
+        }
+
+        if (newMajor === 1) {
+          layerGroup.flipScaleY();
+        }
+
+        if (newMajor === 2) {
+          layerGroup.flipScaleZ();
+        }
 
         if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
