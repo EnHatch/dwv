@@ -1562,11 +1562,11 @@ export class App {
         const imageOrientationPatient = data.meta['00200037'].value.map((s) =>
           parseInt(s)
         );
-        const orientation = this.#getCurrentOrientation(
-          imageOrientationPatient,
-          dataViewConfig.orientation
-        );
-
+        // const orientation = this.#getCurrentOrientation(
+        //   imageOrientationPatient,
+        //   dataViewConfig.orientation
+        // );
+        const orientation = imageGeometry.getOrientation();
         const newMajor = orientation.getThirdColMajorDirection();
         console.log(
           'NEO ORIENTATION &&&&& ',
