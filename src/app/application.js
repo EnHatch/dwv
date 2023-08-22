@@ -1371,19 +1371,18 @@ export class App {
     return true;
   }
 
-  #getCurrentOrientation(imageOrientationPatient, currentOrientationName) {
+  #getOrientationReference(imageOrientationPatient) {
     const ippNumbers = imageOrientationPatient.map((s) => parseInt(s));
-    const initialOrientationReference =
-      this.#dicomOrientationReferenceValues.find((o) =>
-        this.#arraysAreEqual(o.values, ippNumbers)
-      );
-
-    console.log(
-      'INITIAL ORIENTATION REFERENCE &&&&& ',
-      imageOrientationPatient,
-      currentOrientationName,
-      initialOrientationReference
+    return this.#dicomOrientationReferenceValues.find((o) =>
+      this.#arraysAreEqual(o.values, ippNumbers)
     );
+  }
+
+  #getCurrentOrientation(imageOrientationPatient, currentOrientationName) {
+    const initialOrientationReference = this.#getOrientationReference(
+      imageOrientationPatient
+    );
+
     if (initialOrientationReference == null) {
       return null;
     }
@@ -1577,17 +1576,21 @@ export class App {
           imageOrientationPatient
         );
 
-        if (newMajor === 0) {
-          layerGroup.flipScaleX();
-        }
+        layerGroup.flipScaleX();
+        layerGroup.flipScaleZ();
+        layerGroup.flipScaleZ();
 
-        if (newMajor === 1) {
-          layerGroup.flipScaleY();
-        }
+        // if (newMajor === 0) {
+        //   layerGroup.flipScaleX();
+        // }
 
-        if (newMajor === 2) {
-          layerGroup.flipScaleZ();
-        }
+        // if (newMajor === 1) {
+        //   layerGroup.flipScaleY();
+        // }
+
+        // if (newMajor === 2) {
+        //   layerGroup.flipScaleZ();
+        // }
 
         if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
