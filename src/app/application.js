@@ -1393,6 +1393,18 @@ export class App {
     // view layer scale
     // only flip scale for base layers
     if (isBaseLayer) {
+      if (typeof dataViewConfig.orientation !== 'undefined') {
+        if (major === 0 || major === 2) {
+          // scale flip Z for oriented views...
+          layerGroup.flipScaleZ();
+        } else {
+          viewLayer.setScale(layerGroup.getScale());
+          if (typeof drawLayer !== 'undefined') {
+            drawLayer.setScale(layerGroup.getScale());
+          }
+        }
+      } else {
+
         console.log("ENHATCH MODIFICATIONS &&&&&");
         const orientation = imageGeometry.getOrientation();
         if (major === 0 || major === 2) {
@@ -1426,7 +1438,7 @@ export class App {
             drawLayer.setScale(layerGroup.getScale());
           }
         }
-      
+      }
     } else {
       viewLayer.setScale(layerGroup.getScale());
       if (typeof drawLayer !== 'undefined') {
