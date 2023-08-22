@@ -1357,12 +1357,33 @@ export class App {
     ]);
   }
 
+  #arraysAreEqual(array1, array2) {
+    if (array1.length !== array2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i] != array2[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   #getCurrentOrientation(imageOrientationPatient, currentOrientationName) {
     const ippNumbers = imageOrientationPatient.map((s) => parseInt(s));
     const initialOrientationReference =
-      this.#dicomOrientationReferenceValues.find(
-        (o) => o.values === ippNumbers
+      this.#dicomOrientationReferenceValues.find((o) =>
+        this.#arraysAreEqual(o.values, ippNumbers)
       );
+
+    console.log(
+      'INITIAL ORIENTATION REFERENCE &&&&& ',
+      imageOrientationPatient,
+      currentOrientationName,
+      initialOrientationReference
+    );
     if (initialOrientationReference == null) {
       return null;
     }
@@ -1546,15 +1567,15 @@ export class App {
           dataViewConfig.orientation
         );
 
-        const newMajor = orientation.getThirdColMajorDirection();
         console.log(
           'NEO ORIENTATION &&&&& ',
           orientation,
-          newMajor,
           dataViewConfig.orientation,
           imageGeometry.getOrientation(),
           imageOrientationPatient
         );
+
+        const newMajor = orientation.getThirdColMajorDirection();
         if (newMajor === 0 || newMajor === 2) {
           // scale flip Z for oriented views...
           //layerGroup.flipScaleZ();
