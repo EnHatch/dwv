@@ -1567,15 +1567,16 @@ export class App {
           dataViewConfig.orientation
         );
 
+        const newMajor = orientation.getThirdColMajorDirection();
         console.log(
           'NEO ORIENTATION &&&&& ',
           orientation,
           dataViewConfig.orientation,
           imageGeometry.getOrientation(),
-          imageOrientationPatient
+          imageOrientationPatient,
+          newMajor
         );
 
-        const newMajor = orientation.getThirdColMajorDirection();
         if (newMajor === 0 || newMajor === 2) {
           // scale flip Z for oriented views...
           //layerGroup.flipScaleZ();
