@@ -1571,11 +1571,10 @@ export class App {
         console.log(
           'NEO ORIENTATION &&&&& ',
           orientation,
-          dataViewConfig.orientation,
+          orientation.getColAbsMax(2),
           imageGeometry.getOrientation(),
-          imageOrientationPatient,
-          newMajor,
-          major
+          imageGeometry.getOrientation().getColAbsMax(2),
+          imageOrientationPatient
         );
 
         layerGroup.flipScaleX();
