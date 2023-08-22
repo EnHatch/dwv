@@ -1536,27 +1536,23 @@ export class App {
     viewLayer.setOffset(layerGroup.getOffset());
     // extra flip offset for oriented views...
     if (typeof dataViewConfig.orientation !== 'undefined') {
-      viewLayer.addFlipOffsetZ();
-      if (typeof drawLayer !== 'undefined') {
-        drawLayer.addFlipOffsetZ();
+      if (major === 2) {
+        // flip offset Y for axial aquired data
+        if (dataViewConfig.orientation !== 'axial') {
+          viewLayer.addFlipOffsetY();
+          if (typeof drawLayer !== 'undefined') {
+            drawLayer.addFlipOffsetY();
+          }
+        }
+      } else if (major === 0) {
+        // flip offset X for sagittal aquired data
+        if (dataViewConfig.orientation !== 'sagittal') {
+          viewLayer.addFlipOffsetX();
+          if (typeof drawLayer !== 'undefined') {
+            drawLayer.addFlipOffsetX();
+          }
+        }
       }
-      // if (major === 2) {
-      //   // flip offset Y for axial aquired data
-      //   if (dataViewConfig.orientation !== 'axial') {
-      //     viewLayer.addFlipOffsetY();
-      //     if (typeof drawLayer !== 'undefined') {
-      //       drawLayer.addFlipOffsetY();
-      //     }
-      //   }
-      // } else if (major === 0) {
-      //   // flip offset X for sagittal aquired data
-      //   if (dataViewConfig.orientation !== 'sagittal') {
-      //     viewLayer.addFlipOffsetX();
-      //     if (typeof drawLayer !== 'undefined') {
-      //       drawLayer.addFlipOffsetX();
-      //     }
-      //   }
-      // }
     }
 
     // view layer scale
@@ -1581,7 +1577,7 @@ export class App {
           imageOrientationPatient
         );
 
-        //layerGroup.flipScaleX();
+        layerGroup.flipScaleX();
 
         if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
