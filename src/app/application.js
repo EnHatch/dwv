@@ -1,27 +1,27 @@
-import {viewEventNames} from '../image/view';
-import {ViewFactory} from '../image/viewFactory';
-import {lut} from '../image/luts';
-import {getMatrixFromName} from '../math/matrix';
-import {Point3D} from '../math/point';
-import {Stage} from '../gui/stage';
-import {Style} from '../gui/style';
-import {getViewOrientation} from '../gui/layerGroup';
-import {ListenerHandler} from '../utils/listen';
-import {State} from '../io/state';
-import {logger} from '../utils/logger';
-import {getUriQuery, decodeQuery} from '../utils/uri';
-import {UndoStack} from '../tools/undo';
-import {ToolboxController} from './toolboxController';
-import {LoadController} from './loadController';
-import {DataController} from './dataController';
+import { viewEventNames } from "../image/view";
+import { ViewFactory } from "../image/viewFactory";
+import { lut } from "../image/luts";
+import { getMatrixFromName } from "../math/matrix";
+import { Point3D } from "../math/point";
+import { Stage } from "../gui/stage";
+import { Style } from "../gui/style";
+import { getViewOrientation } from "../gui/layerGroup";
+import { ListenerHandler } from "../utils/listen";
+import { State } from "../io/state";
+import { logger } from "../utils/logger";
+import { getUriQuery, decodeQuery } from "../utils/uri";
+import { UndoStack } from "../tools/undo";
+import { ToolboxController } from "./toolboxController";
+import { LoadController } from "./loadController";
+import { DataController } from "./dataController";
 
-import {toolList, toolOptions} from '../tools';
-import {binderList} from '../gui/stage';
+import { toolList, toolOptions } from "../tools";
+import { binderList } from "../gui/stage";
 
 // doc imports
 /* eslint-disable no-unused-vars */
-import {LayerGroup} from '../gui/layerGroup';
-import {Image} from '../image/image';
+import { LayerGroup } from "../gui/layerGroup";
+import { Image } from "../image/image";
 /* eslint-enable no-unused-vars */
 
 /**
@@ -40,7 +40,6 @@ import {Image} from '../image/image';
  * ]);
  */
 export class App {
-
   // app options
   #options = null;
 
@@ -119,10 +118,10 @@ export class App {
 
     // load start event
     this.#fireEvent({
-      type: 'loadstart',
-      loadtype: 'image',
-      source: 'internal',
-      loadid: id
+      type: "loadstart",
+      loadtype: "image",
+      source: "internal",
+      loadid: id,
     });
 
     // add image to data controller
@@ -130,12 +129,12 @@ export class App {
 
     // load item event
     this.#fireEvent({
-      type: 'loaditem',
-      loadtype: 'image',
+      type: "loaditem",
+      loadtype: "image",
       data: meta,
-      source: 'internal',
+      source: "internal",
       loadid: id,
-      isfirstitem: true
+      isfirstitem: true,
     });
 
     // optional render
@@ -145,16 +144,16 @@ export class App {
 
     // load events
     this.#fireEvent({
-      type: 'load',
-      loadtype: 'image',
-      source: 'internal',
-      loadid: id
+      type: "load",
+      loadtype: "image",
+      source: "internal",
+      loadid: id,
     });
     this.#fireEvent({
-      type: 'loadend',
-      loadtype: 'image',
-      source: 'internal',
-      loadid: id
+      type: "loadend",
+      loadtype: "image",
+      source: "internal",
+      loadid: id,
     });
 
     return id;
@@ -358,15 +357,15 @@ export class App {
     // store
     this.#options = opt;
     // defaults
-    if (typeof this.#options.viewOnFirstLoadItem === 'undefined') {
+    if (typeof this.#options.viewOnFirstLoadItem === "undefined") {
       this.#options.viewOnFirstLoadItem = true;
     }
 
     // undo stack
     this.#undoStack = new UndoStack();
-    this.#undoStack.addEventListener('undoadd', this.#fireEvent);
-    this.#undoStack.addEventListener('undo', this.#fireEvent);
-    this.#undoStack.addEventListener('redo', this.#fireEvent);
+    this.#undoStack.addEventListener("undoadd", this.#fireEvent);
+    this.#undoStack.addEventListener("undo", this.#fireEvent);
+    this.#undoStack.addEventListener("redo", this.#fireEvent);
 
     // tools
     if (this.#options.tools && this.#options.tools.length !== 0) {
@@ -376,11 +375,11 @@ export class App {
       for (let t = 0; t < keys.length; ++t) {
         const toolName = keys[t];
         // find the tool in the Tools list
-        if (typeof toolList[toolName] !== 'undefined') {
+        if (typeof toolList[toolName] !== "undefined") {
           // create tool instance
           appToolList[toolName] = new toolList[toolName](this);
           // register listeners
-          if (typeof appToolList[toolName].addEventListener !== 'undefined') {
+          if (typeof appToolList[toolName].addEventListener !== "undefined") {
             const names = appToolList[toolName].getEventNames();
             for (let j = 0; j < names.length; ++j) {
               appToolList[toolName].addEventListener(names[j], this.#fireEvent);
@@ -388,36 +387,37 @@ export class App {
           }
           // tool options
           const toolParams = this.#options.tools[toolName];
-          if (typeof toolParams.options !== 'undefined') {
-            let type = 'raw';
-            if (typeof appToolList[toolName].getOptionsType !== 'undefined') {
+          if (typeof toolParams.options !== "undefined") {
+            let type = "raw";
+            if (typeof appToolList[toolName].getOptionsType !== "undefined") {
               type = appToolList[toolName].getOptionsType();
             }
             let appToolOptions = toolParams.options;
-            if (type === 'instance' || type === 'factory') {
+            if (type === "instance" || type === "factory") {
               appToolOptions = {};
               for (let i = 0; i < toolParams.options.length; ++i) {
                 const optionName = toolParams.options[i];
                 let optionClassName = optionName;
-                if (type === 'factory') {
-                  optionClassName += 'Factory';
+                if (type === "factory") {
+                  optionClassName += "Factory";
                 }
-                const toolNamespace = toolName.charAt(0).toLowerCase() +
-                  toolName.slice(1);
-                if (typeof toolOptions[toolNamespace][optionClassName] !==
-                  'undefined') {
+                const toolNamespace =
+                  toolName.charAt(0).toLowerCase() + toolName.slice(1);
+                if (
+                  typeof toolOptions[toolNamespace][optionClassName] !==
+                  "undefined"
+                ) {
                   appToolOptions[optionName] =
                     toolOptions[toolNamespace][optionClassName];
                 } else {
-                  logger.warn('Could not find option class for: ' +
-                    optionName);
+                  logger.warn("Could not find option class for: " + optionName);
                 }
               }
             }
             appToolList[toolName].setOptions(appToolOptions);
           }
         } else {
-          logger.warn('Could not initialise unknown tool: ' + toolName);
+          logger.warn("Could not initialise unknown tool: " + toolName);
         }
       }
       // add tools to the controller
@@ -425,8 +425,9 @@ export class App {
     }
 
     // create load controller
-    this.#loadController =
-      new LoadController(this.#options.defaultCharacterSet);
+    this.#loadController = new LoadController(
+      this.#options.defaultCharacterSet
+    );
     this.#loadController.onloadstart = this.#onloadstart;
     this.#loadController.onprogress = this.#onloadprogress;
     this.#loadController.onloaditem = this.#onloaditem;
@@ -439,7 +440,7 @@ export class App {
     this.#dataController = new DataController();
     // create stage
     this.#stage = new Stage();
-    if (typeof this.#options.binders !== 'undefined') {
+    if (typeof this.#options.binders !== "undefined") {
       this.#stage.setBinders(this.#options.binders);
     }
   }
@@ -454,9 +455,9 @@ export class App {
     // reset undo/redo
     if (this.#undoStack) {
       this.#undoStack = new UndoStack();
-      this.#undoStack.addEventListener('undoadd', this.#fireEvent);
-      this.#undoStack.addEventListener('undo', this.#fireEvent);
-      this.#undoStack.addEventListener('redo', this.#fireEvent);
+      this.#undoStack.addEventListener("undoadd", this.#fireEvent);
+      this.#undoStack.addEventListener("undo", this.#fireEvent);
+      this.#undoStack.addEventListener("redo", this.#fireEvent);
     }
   }
 
@@ -505,7 +506,7 @@ export class App {
    */
   loadFiles = (files) => {
     if (files.length === 0) {
-      logger.warn('Ignoring empty input file list.');
+      logger.warn("Ignoring empty input file list.");
       return;
     }
     this.#loadController.loadFiles(files);
@@ -528,7 +529,7 @@ export class App {
    */
   loadURLs = (urls, options) => {
     if (urls.length === 0) {
-      logger.warn('Ignoring empty input url list.');
+      logger.warn("Ignoring empty input url list.");
       return;
     }
     this.#loadController.loadURLs(urls, options);
@@ -545,16 +546,16 @@ export class App {
 
     // load end callback: loads the state.
     const onLoadEnd = (/*event*/) => {
-      this.removeEventListener('loadend', onLoadEnd);
+      this.removeEventListener("loadend", onLoadEnd);
       this.loadURLs([query.state]);
     };
 
     // check query
-    if (query && typeof query.input !== 'undefined') {
+    if (query && typeof query.input !== "undefined") {
       // optional display state
-      if (typeof query.state !== 'undefined') {
+      if (typeof query.state !== "undefined") {
         // queue after main data load
-        this.addEventListener('loadend', onLoadEnd);
+        this.addEventListener("loadend", onLoadEnd);
       }
       // load base image
       decodeQuery(query, this.loadURLs, options);
@@ -613,15 +614,18 @@ export class App {
    */
   #getViewConfigs(dataIndex) {
     // check options
-    if (this.#options.dataViewConfigs === null ||
-      typeof this.#options.dataViewConfigs === 'undefined') {
-      throw new Error('No available data view configuration');
+    if (
+      this.#options.dataViewConfigs === null ||
+      typeof this.#options.dataViewConfigs === "undefined"
+    ) {
+      throw new Error("No available data view configuration");
     }
     let configs = [];
-    if (typeof this.#options.dataViewConfigs['*'] !== 'undefined') {
-      configs = this.#options.dataViewConfigs['*'];
+    if (typeof this.#options.dataViewConfigs["*"] !== "undefined") {
+      configs = this.#options.dataViewConfigs["*"];
     } else if (
-      typeof this.#options.dataViewConfigs[dataIndex] !== 'undefined') {
+      typeof this.#options.dataViewConfigs[dataIndex] !== "undefined"
+    ) {
       configs = this.#options.dataViewConfigs[dataIndex];
     }
     return configs;
@@ -672,9 +676,10 @@ export class App {
           // bind events
           this.#bindLayerGroupToApp(layerGroup);
           // optional orientation
-          if (typeof viewConfig.orientation !== 'undefined') {
+          if (typeof viewConfig.orientation !== "undefined") {
             layerGroup.setTargetOrientation(
-              getMatrixFromName(viewConfig.orientation));
+              getMatrixFromName(viewConfig.orientation)
+            );
           }
           divIds.push(viewConfig.divId);
         }
@@ -691,8 +696,8 @@ export class App {
     // create instances
     const instances = [];
     for (let i = 0; i < list.length; ++i) {
-      if (typeof binderList[list[i]] !== 'undefined') {
-        instances.push(new binderList[list[i]]);
+      if (typeof binderList[list[i]] !== "undefined") {
+        instances.push(new binderList[list[i]]());
       }
     }
     // pass to stage
@@ -705,8 +710,8 @@ export class App {
    * @param {number} dataIndex The data index to render.
    */
   render(dataIndex) {
-    if (typeof dataIndex === 'undefined' || dataIndex === null) {
-      throw new Error('Cannot render without data index');
+    if (typeof dataIndex === "undefined" || dataIndex === null) {
+      throw new Error("Cannot render without data index");
     }
 
     // create layer groups if not done yet
@@ -719,17 +724,17 @@ export class App {
     const viewConfigs = this.#getViewConfigs(dataIndex);
     // nothing to do if no view config
     if (viewConfigs.length === 0) {
-      logger.info('Not rendering data: ' + dataIndex +
-        ' (no data view config)');
+      logger.info(
+        "Not rendering data: " + dataIndex + " (no data view config)"
+      );
       return;
     }
     for (let i = 0; i < viewConfigs.length; ++i) {
       const config = viewConfigs[i];
-      const layerGroup =
-      this.#stage.getLayerGroupByDivId(config.divId);
+      const layerGroup = this.#stage.getLayerGroupByDivId(config.divId);
       // layer group must exist
       if (!layerGroup) {
-        throw new Error('No layer group for ' + config.divId);
+        throw new Error("No layer group for " + config.divId);
       }
       // initialise or add view
       // warn: needs a loaded DOM
@@ -769,7 +774,7 @@ export class App {
    */
   translate(tx, ty) {
     const layerGroup = this.#stage.getActiveLayerGroup();
-    layerGroup.addTranslation({x: tx, y: ty});
+    layerGroup.addTranslation({ x: tx, y: ty });
     layerGroup.draw();
   }
 
@@ -792,17 +797,20 @@ export class App {
    */
   setDrawings(drawings, drawingsDetails) {
     const layerGroup = this.#stage.getActiveLayerGroup();
-    const viewController =
-      layerGroup.getActiveViewLayer().getViewController();
-    const drawController =
-      layerGroup.getActiveDrawLayer().getDrawController();
+    const viewController = layerGroup.getActiveViewLayer().getViewController();
+    const drawController = layerGroup.getActiveDrawLayer().getDrawController();
 
     drawController.setDrawings(
-      drawings, drawingsDetails, this.#fireEvent, this.addToUndoStack);
+      drawings,
+      drawingsDetails,
+      this.#fireEvent,
+      this.addToUndoStack
+    );
 
     drawController.activateDrawLayer(
       viewController.getCurrentOrientedIndex(),
-      viewController.getScrollIndex());
+      viewController.getScrollIndex()
+    );
   }
 
   /**
@@ -870,36 +878,44 @@ export class App {
   defaultOnKeydown = (event) => {
     if (event.ctrlKey) {
       if (event.shiftKey) {
-        const viewController =
-          this.#stage.getActiveLayerGroup()
-            .getActiveViewLayer().getViewController();
+        const viewController = this.#stage
+          .getActiveLayerGroup()
+          .getActiveViewLayer()
+          .getViewController();
         const size = viewController.getImageSize();
-        if (event.key === 'ArrowLeft') { // crtl-shift-arrow-left
+        if (event.key === "ArrowLeft") {
+          // crtl-shift-arrow-left
           if (size.moreThanOne(3)) {
             viewController.decrementIndex(3);
           }
-        } else if (event.key === 'ArrowUp') { // crtl-shift-arrow-up
+        } else if (event.key === "ArrowUp") {
+          // crtl-shift-arrow-up
           if (viewController.canScroll()) {
             viewController.incrementScrollIndex();
           }
-        } else if (event.key === 'ArrowRight') { // crtl-shift-arrow-right
+        } else if (event.key === "ArrowRight") {
+          // crtl-shift-arrow-right
           if (size.moreThanOne(3)) {
             viewController.incrementIndex(3);
           }
-        } else if (event.key === 'ArrowDown') { // crtl-shift-arrow-down
+        } else if (event.key === "ArrowDown") {
+          // crtl-shift-arrow-down
           if (viewController.canScroll()) {
             viewController.decrementScrollIndex();
           }
         }
-      } else if (event.key === 'y') { // crtl-y
+      } else if (event.key === "y") {
+        // crtl-y
         this.#undoStack.redo();
-      } else if (event.key === 'z') { // crtl-z
+      } else if (event.key === "z") {
+        // crtl-z
         this.#undoStack.undo();
-      } else if (event.key === ' ') { // crtl-space
+      } else if (event.key === " ") {
+        // crtl-space
         for (let i = 0; i < this.#stage.getNumberOfLayerGroups(); ++i) {
-          this.#stage.getLayerGroup(i).setShowCrosshair(
-            !this.#stage.getLayerGroup(i).getShowCrosshair()
-          );
+          this.#stage
+            .getLayerGroup(i)
+            .setShowCrosshair(!this.#stage.getLayerGroup(i).getShowCrosshair());
         }
       }
     }
@@ -928,9 +944,10 @@ export class App {
    * @param {string} colourMap The colour map name.
    */
   setColourMap(colourMap) {
-    const viewController =
-      this.#stage.getActiveLayerGroup()
-        .getActiveViewLayer().getViewController();
+    const viewController = this.#stage
+      .getActiveLayerGroup()
+      .getActiveViewLayer()
+      .getViewController();
     viewController.setColourMapFromName(colourMap);
   }
 
@@ -940,9 +957,10 @@ export class App {
    * @param {object} preset The window/level preset.
    */
   setWindowLevelPreset(preset) {
-    const viewController =
-      this.#stage.getActiveLayerGroup()
-        .getActiveViewLayer().getViewController();
+    const viewController = this.#stage
+      .getActiveLayerGroup()
+      .getActiveViewLayer()
+      .getViewController();
     viewController.setWindowLevelPreset(preset);
   }
 
@@ -957,9 +975,7 @@ export class App {
       const layerGroup = this.#stage.getLayerGroup(i);
       // draw or view layer
       let layer = null;
-      if (tool === 'Draw' ||
-        tool === 'Livewire' ||
-        tool === 'Floodfill') {
+      if (tool === "Draw" || tool === "Livewire" || tool === "Floodfill") {
         layer = layerGroup.getActiveDrawLayer();
       } else {
         layer = layerGroup.getActiveViewLayer();
@@ -1045,7 +1061,7 @@ export class App {
      * @property {*} source The load source: string for an url,
      *   File for a file.
      */
-    event.type = 'loadstart';
+    event.type = "loadstart";
     this.#fireEvent(event);
   };
 
@@ -1067,7 +1083,7 @@ export class App {
      * @property {number} loaded The loaded percentage.
      * @property {number} total The total percentage.
      */
-    event.type = 'loadprogress';
+    event.type = "loadprogress";
     this.#fireEvent(event);
   };
 
@@ -1078,28 +1094,34 @@ export class App {
    */
   #onloaditem = (event) => {
     // check event
-    if (typeof event.data === 'undefined') {
-      logger.error('Missing loaditem event data.');
+    if (typeof event.data === "undefined") {
+      logger.error("Missing loaditem event data.");
     }
-    if (typeof event.loadtype === 'undefined') {
-      logger.error('Missing loaditem event load type.');
+    if (typeof event.loadtype === "undefined") {
+      logger.error("Missing loaditem event load type.");
     }
 
     const isFirstLoadItem = event.isfirstitem;
 
     let eventMetaData = null;
-    if (event.loadtype === 'image') {
+    if (event.loadtype === "image") {
       if (isFirstLoadItem) {
         this.#dataController.addNew(
-          event.loadid, event.data.image, event.data.info);
+          event.loadid,
+          event.data.image,
+          event.data.info
+        );
       } else {
         this.#dataController.update(
-          event.loadid, event.data.image, event.data.info);
+          event.loadid,
+          event.data.image,
+          event.data.info
+        );
       }
       eventMetaData = event.data.info;
-    } else if (event.loadtype === 'state') {
+    } else if (event.loadtype === "state") {
       this.applyJsonState(event.data);
-      eventMetaData = 'state';
+      eventMetaData = "state";
     }
 
     /**
@@ -1114,19 +1136,22 @@ export class App {
      * @property {object} data The loaded meta data.
      */
     this.#fireEvent({
-      type: 'loaditem',
+      type: "loaditem",
       data: eventMetaData,
       source: event.source,
       loadtype: event.loadtype,
       loadid: event.loadid,
       isfirstitem: event.isfirstitem,
-      warn: event.warn
+      warn: event.warn,
     });
 
     // render if first and flag allows
-    if (event.loadtype === 'image' &&
-    this.#getViewConfigs(event.loadid).length !== 0 &&
-      isFirstLoadItem && this.#options.viewOnFirstLoadItem) {
+    if (
+      event.loadtype === "image" &&
+      this.#getViewConfigs(event.loadid).length !== 0 &&
+      isFirstLoadItem &&
+      this.#options.viewOnFirstLoadItem
+    ) {
       this.render(event.loadid);
     }
   };
@@ -1145,7 +1170,7 @@ export class App {
      * @property {string} type The event type: load.
      * @property {string} loadType The load type: image or state.
      */
-    event.type = 'load';
+    event.type = "load";
     this.#fireEvent(event);
   };
 
@@ -1166,7 +1191,7 @@ export class App {
      * @property {*} source The load source: string for an url,
      *   File for a file.
      */
-    event.type = 'loadend';
+    event.type = "loadend";
     this.#fireEvent(event);
   };
 
@@ -1188,7 +1213,7 @@ export class App {
      * @property {object} error The error.
      * @property {object} target The event target.
      */
-    event.type = 'loaderror';
+    event.type = "loaderror";
     this.#fireEvent(event);
   };
 
@@ -1208,7 +1233,7 @@ export class App {
      * @property {*} source The load source: string for an url,
      *   File for a file.
      */
-    event.type = 'loadabort';
+    event.type = "loadabort";
     this.#fireEvent(event);
   };
 
@@ -1219,19 +1244,19 @@ export class App {
    */
   #bindLayerGroupToApp(group) {
     // propagate layer group events
-    group.addEventListener('zoomchange', this.#fireEvent);
-    group.addEventListener('offsetchange', this.#fireEvent);
+    group.addEventListener("zoomchange", this.#fireEvent);
+    group.addEventListener("offsetchange", this.#fireEvent);
     // propagate viewLayer events
-    group.addEventListener('renderstart', this.#fireEvent);
-    group.addEventListener('renderend', this.#fireEvent);
+    group.addEventListener("renderstart", this.#fireEvent);
+    group.addEventListener("renderend", this.#fireEvent);
     // propagate view events
     for (let j = 0; j < viewEventNames.length; ++j) {
       group.addEventListener(viewEventNames[j], this.#fireEvent);
     }
     // propagate drawLayer events
-    if (this.#toolboxController && this.#toolboxController.hasTool('Draw')) {
-      group.addEventListener('drawcreate', this.#fireEvent);
-      group.addEventListener('drawdelete', this.#fireEvent);
+    if (this.#toolboxController && this.#toolboxController.hasTool("Draw")) {
+      group.addEventListener("drawcreate", this.#fireEvent);
+      group.addEventListener("drawdelete", this.#fireEvent);
     }
   }
 
@@ -1252,6 +1277,57 @@ export class App {
     }
   }
 
+  // const dicomOrientationReferenceValues = [
+  //     {
+  //         orientation: 'axial',
+  //         values: [1, 0, 0, 0, 1, 0],
+  //     },
+  //     {
+  //         orientation: 'axial',
+  //         values: [-1, 0, 0, 0, 1, 0],
+  //     },
+  //     {
+  //         orientation: 'axial',
+  //         values: [1, 0, 0, 0, -1, 0],
+  //     },
+  //     {
+  //         orientation: 'axial',
+  //         values: [-1, 0, 0, 0, -1, 0],
+  //     },
+  //     {
+  //         orientation: 'coronal',
+  //         values: [1, 0, 0, 0, 0, -1],
+  //     },
+  //     {
+  //         orientation: 'coronal',
+  //         values: [-1, 0, 0, 0, 0, 1],
+  //     },
+  //     {
+  //         orientation: 'coronal',
+  //         values: [1, 0, 0, 0, 0, 1],
+  //     },
+  //     {
+  //         orientation: 'coronal',
+  //         values: [-1, 0, 0, 0, 0, -1],
+  //     },
+  //     {
+  //         orientation: 'sagittal',
+  //         values: [0, 1, 0, 0, 0, -1],
+  //     },
+  //     {
+  //         orientation: 'sagittal',
+  //         values: [0, 1, 0, 0, 0, 1],
+  //     },
+  //     {
+  //         orientation: 'sagittal',
+  //         values: [0, -1, 0, 0, 0, 1],
+  //     },
+  //     {
+  //         orientation: 'sagittal',
+  //         values: [0, -1, 0, 0, 0, -1],
+  //     }
+  // ];
+
   /**
    * Add a view layer.
    *
@@ -1261,12 +1337,13 @@ export class App {
   #addViewLayer(dataIndex, dataViewConfig) {
     const data = this.#dataController.get(dataIndex);
     if (!data) {
-      throw new Error('Cannot initialise layer with data id: ' + dataIndex);
+      throw new Error("Cannot initialise layer with data id: " + dataIndex);
     }
     const layerGroup = this.#stage.getLayerGroupByDivId(dataViewConfig.divId);
     if (!layerGroup) {
-      throw new Error('Cannot initialise layer with group id: ' +
-        dataViewConfig.divId);
+      throw new Error(
+        "Cannot initialise layer with group id: " + dataViewConfig.divId
+      );
     }
     const imageGeometry = data.image.getGeometry();
 
@@ -1284,11 +1361,9 @@ export class App {
 
     // make pixel of value 0 transparent for segmentation
     // (assuming RGB data)
-    if (data.image.getMeta().Modality === 'SEG') {
+    if (data.image.getMeta().Modality === "SEG") {
       view.setAlphaFunction(function (value /*, index*/) {
-        if (value[0] === 0 &&
-          value[1] === 0 &&
-          value[2] === 0) {
+        if (value[0] === 0 && value[1] === 0 && value[2] === 0) {
           return 0;
         } else {
           return 0xff;
@@ -1297,7 +1372,7 @@ export class App {
     }
 
     // colour map
-    if (typeof dataViewConfig.colourMap !== 'undefined') {
+    if (typeof dataViewConfig.colourMap !== "undefined") {
       view.setColourMap(dataViewConfig.colourMap);
     }
 
@@ -1310,7 +1385,7 @@ export class App {
     if (!isBaseLayer) {
       opacity = 0.5;
       // set color map if non was provided
-      if (typeof dataViewConfig.colourMap === 'undefined') {
+      if (typeof dataViewConfig.colourMap === "undefined") {
         view.setColourMap(lut.rainbow);
       }
     }
@@ -1324,14 +1399,14 @@ export class App {
     const viewController = viewLayer.getViewController();
 
     // listen to controller events
-    if (data.image.getMeta().Modality === 'SEG') {
-      viewController.addEventListener('masksegmentdelete', this.#fireEvent);
-      viewController.addEventListener('masksegmentredraw', this.#fireEvent);
+    if (data.image.getMeta().Modality === "SEG") {
+      viewController.addEventListener("masksegmentdelete", this.#fireEvent);
+      viewController.addEventListener("masksegmentredraw", this.#fireEvent);
     }
 
     // listen to image changes
-    this.#dataController.addEventListener('imageset', viewLayer.onimageset);
-    this.#dataController.addEventListener('imagechange', (event) => {
+    this.#dataController.addEventListener("imageset", viewLayer.onimageset);
+    this.#dataController.addEventListener("imagechange", (event) => {
       viewLayer.onimagechange(event);
       this.render(event.dataid);
     });
@@ -1344,7 +1419,7 @@ export class App {
 
     // optional draw layer
     let drawLayer;
-    if (this.#toolboxController && this.#toolboxController.hasTool('Draw')) {
+    if (this.#toolboxController && this.#toolboxController.hasTool("Draw")) {
       drawLayer = layerGroup.addDrawLayer();
       drawLayer.initialise(size2D, spacing2D, dataIndex);
       drawLayer.setPlaneHelper(viewLayer.getViewController().getPlaneHelper());
@@ -1353,11 +1428,11 @@ export class App {
     // sync layers position
     const value = [
       viewController.getCurrentIndex().getValues(),
-      viewController.getCurrentPosition().getValues()
+      viewController.getCurrentPosition().getValues(),
     ];
     layerGroup.updateLayersToPositionChange({
       value: value,
-      srclayerid: viewLayer.getId()
+      srclayerid: viewLayer.getId(),
     });
 
     // sync layer groups
@@ -1365,25 +1440,34 @@ export class App {
 
     // major orientation axis
     const major = imageGeometry.getOrientation().getThirdColMajorDirection();
-    console.log("BASELAYER &&&&&& ", isBaseLayer, major, imageGeometry.getOrientation(), dataViewConfig.orientation);
+    const meta = data.image.getMeta();
+    console.log(
+      "BASELAYER &&&&&& ",
+      isBaseLayer,
+      major,
+      imageGeometry.getOrientation(),
+      dataViewConfig.orientation,
+      meta.imageOrientationPatient,
+      data
+    );
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
     // extra flip offset for oriented views...
-    if (typeof dataViewConfig.orientation !== 'undefined') {
+    if (typeof dataViewConfig.orientation !== "undefined") {
       if (major === 2) {
         // flip offset Y for axial aquired data
-        if (dataViewConfig.orientation !== 'axial') {
+        if (dataViewConfig.orientation !== "axial") {
           viewLayer.addFlipOffsetY();
-          if (typeof drawLayer !== 'undefined') {
+          if (typeof drawLayer !== "undefined") {
             drawLayer.addFlipOffsetY();
           }
         }
       } else if (major === 0) {
         // flip offset X for sagittal aquired data
-        if (dataViewConfig.orientation !== 'sagittal') {
+        if (dataViewConfig.orientation !== "sagittal") {
           viewLayer.addFlipOffsetX();
-          if (typeof drawLayer !== 'undefined') {
+          if (typeof drawLayer !== "undefined") {
             drawLayer.addFlipOffsetX();
           }
         }
@@ -1393,18 +1477,17 @@ export class App {
     // view layer scale
     // only flip scale for base layers
     if (isBaseLayer) {
-      if (typeof dataViewConfig.orientation !== 'undefined') {
+      if (typeof dataViewConfig.orientation !== "undefined") {
         if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
           layerGroup.flipScaleZ();
         } else {
           viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== 'undefined') {
+          if (typeof drawLayer !== "undefined") {
             drawLayer.setScale(layerGroup.getScale());
           }
         }
       } else {
-
         console.log("ENHATCH MODIFICATIONS &&&&&");
         const orientation = imageGeometry.getOrientation();
         if (major === 0 || major === 2) {
@@ -1431,21 +1514,18 @@ export class App {
           ) {
             layerGroup.flipScaleZ();
           }
-
         } else {
           viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== 'undefined') {
+          if (typeof drawLayer !== "undefined") {
             drawLayer.setScale(layerGroup.getScale());
           }
         }
       }
     } else {
       viewLayer.setScale(layerGroup.getScale());
-      if (typeof drawLayer !== 'undefined') {
+      if (typeof drawLayer !== "undefined") {
         drawLayer.setScale(layerGroup.getScale());
       }
     }
-
   }
-
 } // class App
