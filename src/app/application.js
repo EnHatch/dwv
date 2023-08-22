@@ -1574,7 +1574,8 @@ export class App {
           dataViewConfig.orientation,
           imageGeometry.getOrientation(),
           imageOrientationPatient,
-          newMajor
+          newMajor,
+          major
         );
 
         if (major === 0 || major === 2) {
@@ -1585,6 +1586,7 @@ export class App {
             orientation.get(0, 1) < 0 ||
             orientation.get(0, 2) < 0
           ) {
+            console.log('FLIP SCALE X &&&&&&');
             layerGroup.flipScaleX();
           }
 
@@ -1593,6 +1595,7 @@ export class App {
             orientation.get(1, 1) < 0 ||
             orientation.get(1, 2) < 0
           ) {
+            console.log('FLIP SCALE Y &&&&&&');
             layerGroup.flipScaleY();
           }
 
@@ -1601,6 +1604,7 @@ export class App {
             orientation.get(2, 1) < 0 ||
             orientation.get(2, 2) < 0
           ) {
+            console.log('FLIP SCALE Z &&&&&&');
             layerGroup.flipScaleZ();
           }
         } else {
