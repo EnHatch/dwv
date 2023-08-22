@@ -1365,7 +1365,7 @@ export class App {
 
     // major orientation axis
     const major = imageGeometry.getOrientation().getThirdColMajorDirection();
-    console.log("BASELAYER &&&&&& ", isBaseLayer, major, imageGeometry.getOrientation());
+    console.log("BASELAYER &&&&&& ", isBaseLayer, major, imageGeometry.getOrientation(), dataViewConfig.orientation);
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
