@@ -1562,11 +1562,11 @@ export class App {
         const imageOrientationPatient = data.meta['00200037'].value.map((s) =>
           parseInt(s)
         );
-        // const orientation = this.#getCurrentOrientation(
-        //   imageOrientationPatient,
-        //   dataViewConfig.orientation
-        // );
-        const orientation = imageGeometry.getOrientation();
+        const orientation = this.#getCurrentOrientation(
+          imageOrientationPatient,
+          dataViewConfig.orientation
+        );
+        //const orientation = imageGeometry.getOrientation();
         const newMajor = orientation.getThirdColMajorDirection();
         console.log(
           'NEO ORIENTATION &&&&& ',
@@ -1577,6 +1577,8 @@ export class App {
           newMajor,
           major
         );
+
+        layerGroup.flipScaleY();
 
         if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
