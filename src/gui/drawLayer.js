@@ -248,6 +248,20 @@ export class DrawLayer {
   }
 
   /**
+   * Flip the scale along the layer Y axis.
+   */
+  flipScaleY() {
+    this.#flipScale.y *= -1;
+  }
+
+  /**
+   * Flip the scale along the layer X axis.
+   */
+  flipScaleX() {
+    this.#flipScale.x *= -1;
+  }
+
+  /**
    * Set the layer scale.
    *
    * @param {object} newScale The scale as {x,y}.

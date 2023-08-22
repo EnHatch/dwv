@@ -1553,6 +1553,9 @@ export class App {
     let flipOffsetX = false;
     let flipOffsetY = false;
     let flipScaleZ = false;
+    let flipScaleY = false;
+    let flipScaleX = false;
+
     if (typeof dataViewConfig.orientation !== 'undefined') {
       if (major === 2) {
         // scale flip Z for oriented views...
@@ -1570,11 +1573,33 @@ export class App {
         }
       }
     } else {
-      if (major === 0) {
-        // scale flip Z for sagittal and undefined target orientation
-        flipScaleZ = true;
-      }
+        const orientation = imageGeometry.getOrientation();
+        if (major === 0 || major === 2) {
+          if (
+            orientation.get(0, 0) < 0 ||
+            orientation.get(0, 1) < 0 ||
+            orientation.get(0, 2) < 0
+          ) {
+            flipScaleX = true;
+          }
+
+          if (
+            orientation.get(1, 0) < 0 ||
+            orientation.get(1, 1) < 0 ||
+            orientation.get(1, 2) < 0
+          ) {
+            flipScaleY = true;
+          }
+
+          if (
+            orientation.get(2, 0) < 0 ||
+            orientation.get(2, 1) < 0 ||
+            orientation.get(2, 2) < 0
+          ) {
+            flipScaleZ = true;
+          }
     }
+
     // apply
     if (flipOffsetX) {
       viewLayer.addFlipOffsetX();
@@ -1592,6 +1617,18 @@ export class App {
       viewLayer.flipScaleZ();
       if (typeof drawLayer !== 'undefined') {
         drawLayer.flipScaleZ();
+      }
+    }
+    if (flipScaleY) {
+      viewLayer.flipScaleY();
+      if (typeof drawLayer !== 'undefined') {
+        drawLayer.flipScaleY();
+      }
+    }
+    if (flipScaleX) {
+      viewLayer.flipScaleX();
+      if (typeof drawLayer !== 'undefined') {
+        drawLayer.flipScaleX();
       }
     }
 
