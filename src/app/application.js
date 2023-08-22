@@ -1598,6 +1598,7 @@ export class App {
           ) {
             flipScaleZ = true;
           }
+      }
     }
 
     // apply
@@ -1650,7 +1651,6 @@ export class App {
         this.#toolboxController.init();
       }
     }
-
   }
 
 } // class App
