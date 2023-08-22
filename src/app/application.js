@@ -1577,7 +1577,7 @@ export class App {
           newMajor
         );
 
-        if (newMajor === 0 || newMajor === 2) {
+        if (major === 0 || major === 2) {
           // scale flip Z for oriented views...
           //layerGroup.flipScaleZ();
           if (
