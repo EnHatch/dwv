@@ -111,7 +111,7 @@ export const defaultPresets: {
 
 // @public (undocumented)
 export namespace defaults {
-    let // (undocumented)
+    const // (undocumented)
     labelText: {
         [x: string]: {
             [x: string]: string;
@@ -149,6 +149,9 @@ export class DrawLayer {
     display(flag: boolean): void;
     draw(): void;
     fitToContainer(fitScale1D: number, fitSize: object, fitOffset: object): void;
+    flipScaleX(): void;
+    flipScaleY(): void;
+    flipScaleZ(): void;
     getBaseSize(): object;
     getDataId(): string;
     getDrawController(): object;
@@ -316,7 +319,6 @@ export class LayerGroup {
     getOffset(): object;
     getScale(): object;
     getShowCrosshair(): boolean;
-    getTargetOrientation(): Matrix33;
     getViewDataIndices(): any[];
     getViewLayersByDataId(dataId: string): ViewLayer[];
     removeEventListener(type: string, callback: object): void;
@@ -332,7 +334,6 @@ export class LayerGroup {
     setOffset(newOffset: object): void;
     setScale(newScale: object, center?: Point3D): void;
     setShowCrosshair(flag: boolean): void;
-    setTargetOrientation(orientation: Matrix33): void;
     updateLayersToPositionChange: (event: object) => void;
 }
 
@@ -340,7 +341,7 @@ export class LayerGroup {
 export namespace logger {
     // (undocumented)
     export function debug(msg: string): void;
-    let // (undocumented)
+    const // (undocumented)
     level: number;
     // (undocumented)
     export function error(msg: string): void;
@@ -348,15 +349,15 @@ export namespace logger {
     export function info(msg: string): void;
     // (undocumented)
     export namespace levels {
-        let // (undocumented)
+        const // (undocumented)
         TRACE: number;
-        let // (undocumented)
+        const // (undocumented)
         DEBUG: number;
-        let // (undocumented)
+        const // (undocumented)
         INFO: number;
-        let // (undocumented)
+        const // (undocumented)
         WARN: number;
-        let // (undocumented)
+        const // (undocumented)
         ERROR: number;
     }
     // (undocumented)
@@ -646,6 +647,9 @@ export class ViewLayer {
     displayToPlaneScale(x: number, y: number): object;
     draw(): void;
     fitToContainer(fitScale1D: number, fitSize: object, fitOffset: object): void;
+    flipScaleX(): void;
+    flipScaleY(): void;
+    flipScaleZ(): void;
     getBaseSize(): object;
     getDataId(): string;
     getId(): string;

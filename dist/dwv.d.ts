@@ -323,6 +323,7 @@ export declare class App {
     removeDataViewConfig(dataId: string, config: object): void;
     /**
      * Update a data view config.
+     * Removes and re-creates the layer if found.
      *
      * @param {string} dataId The data id.
      * @param {string} divId The div id.
@@ -553,7 +554,7 @@ export declare const defaultPresets: {
 };
 
 export declare namespace defaults {
-    let labelText: {
+    const labelText: {
         [x: string]: {
             [x: string]: string;
         };
@@ -737,6 +738,18 @@ export declare class DrawLayer {
      * Add a flip offset along the layer Y axis.
      */
     addFlipOffsetY(): void;
+    /**
+     * Flip the scale along the layer Z axis.
+     */
+    flipScaleZ(): void;
+    /**
+     * Flip the scale along the layer Y axis.
+     */
+    flipScaleY(): void;
+    /**
+     * Flip the scale along the layer X axis.
+     */
+    flipScaleX(): void;
     /**
      * Set the layer scale.
      *
@@ -1604,18 +1617,6 @@ export declare class LayerGroup {
      */
     constructor(containerDiv: HTMLElement);
     /**
-     * Get the target orientation.
-     *
-     * @returns {Matrix33} The orientation matrix.
-     */
-    getTargetOrientation(): Matrix33;
-    /**
-     * Set the target orientation.
-     *
-     * @param {Matrix33} orientation The orientation matrix.
-     */
-    setTargetOrientation(orientation: Matrix33): void;
-    /**
      * Get the showCrosshair flag.
      *
      * @returns {boolean} True to display the crosshair.
@@ -1848,13 +1849,13 @@ export declare class LayerGroup {
 
 export declare namespace logger {
     export namespace levels {
-        let TRACE: number;
-        let DEBUG: number;
-        let INFO: number;
-        let WARN: number;
-        let ERROR: number;
+        const TRACE: number;
+        const DEBUG: number;
+        const INFO: number;
+        const WARN: number;
+        const ERROR: number;
     }
-    let level: number;
+    const level: number;
     export function trace(msg: string): void;
     export function debug(msg: string): void;
     export function info(msg: string): void;
@@ -3418,6 +3419,18 @@ export declare class ViewLayer {
      * Add a flip offset along the layer Y axis.
      */
     addFlipOffsetY(): void;
+    /**
+     * Flip the scale along the layer Z axis.
+     */
+    flipScaleZ(): void;
+    /**
+     * Flip the scale along the layer Y axis.
+     */
+    flipScaleY(): void;
+    /**
+     * Flip the scale along the layer X axis.
+     */
+    flipScaleX(): void;
     /**
      * Set the layer scale.
      *
