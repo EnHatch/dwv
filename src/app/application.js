@@ -1599,8 +1599,10 @@ export class App {
 
         if (initialOrientationReference.orientation === 'sagittal') {
           if (dataViewConfig.orientation === 'coronal') {
+            layerGroup.flipScaleZ();
             console.log('SAGITTAL => CORONAL &&&&&');
           } else if (dataViewConfig.orientation === 'axial') {
+            layerGroup.flipScaleZ();
             console.log('SAGITTAL => AXIAL &&&&&');
           }
         }
