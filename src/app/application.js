@@ -1558,19 +1558,11 @@ export class App {
         );
 
         if (initialOrientationReference.orientation === 'axial') {
-          if (dataViewConfig.orientation === 'coronal') {
-            layerGroup.flipScaleZ();
-          } else if (dataViewConfig.orientation === 'sagittal') {
-            layerGroup.flipScaleZ();
-          }
+          layerGroup.flipScaleZ();
         }
 
         if (initialOrientationReference.orientation === 'sagittal') {
-          if (dataViewConfig.orientation === 'coronal') {
-            layerGroup.flipScaleX();
-          } else if (dataViewConfig.orientation === 'axial') {
-            layerGroup.flipScaleX();
-          }
+          layerGroup.flipScaleX();
         }
       }
 
