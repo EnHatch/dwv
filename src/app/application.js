@@ -1522,14 +1522,6 @@ export class App {
 
     // major orientation axis
     const major = imageGeometry.getOrientation().getThirdColMajorDirection();
-    console.log(
-      'BASELAYER &&&&&& ',
-      isBaseLayer,
-      major,
-      imageGeometry.getOrientation(),
-      dataViewConfig.orientation,
-      data
-    );
 
     // view layer offset (done before scale)
     viewLayer.setOffset(layerGroup.getOffset());
@@ -1568,24 +1560,13 @@ export class App {
         //   imageOrientationPatient,
         //   dataViewConfig.orientation
         // );
-        const orientation = imageGeometry.getOrientation();
-        const newMajor = orientation.getThirdColMajorDirection();
-        console.log(
-          'NEO ORIENTATION &&&&& ',
-          orientation,
-          orientation.getColAbsMax(2),
-          imageGeometry.getOrientation(),
-          imageGeometry.getOrientation().getColAbsMax(2),
-          imageOrientationPatient
-        );
+        // const orientation = imageGeometry.getOrientation();
 
         if (initialOrientationReference.orientation === 'axial') {
           if (dataViewConfig.orientation === 'coronal') {
             layerGroup.flipScaleZ();
-            console.log('AXIAL => CORONAL &&&&&');
           } else if (dataViewConfig.orientation === 'sagittal') {
             layerGroup.flipScaleZ();
-            console.log('AXIAL => SAGITTAL &&&&&');
           }
         }
 
@@ -1600,73 +1581,41 @@ export class App {
         if (initialOrientationReference.orientation === 'sagittal') {
           if (dataViewConfig.orientation === 'coronal') {
             layerGroup.flipScaleX();
-            console.log('SAGITTAL => CORONAL &&&&&');
           } else if (dataViewConfig.orientation === 'axial') {
             layerGroup.flipScaleX();
-            console.log('SAGITTAL => AXIAL &&&&&');
           }
         }
+      }
 
-        if (major === 0 || major === 2) {
-          if (
-            orientation.get(0, 0) < 0 ||
-            orientation.get(0, 1) < 0 ||
-            orientation.get(0, 2) < 0
-          ) {
-            layerGroup.flipScaleX();
-          }
-          if (
-            orientation.get(1, 0) < 0 ||
-            orientation.get(1, 1) < 0 ||
-            orientation.get(1, 2) < 0
-          ) {
-            layerGroup.flipScaleY();
-          }
-          if (
-            orientation.get(2, 0) < 0 ||
-            orientation.get(2, 1) < 0 ||
-            orientation.get(2, 2) < 0
-          ) {
-            layerGroup.flipScaleZ();
-          }
-        } else {
-          viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== 'undefined') {
-            drawLayer.setScale(layerGroup.getScale());
-          }
+      const orientation = imageGeometry.getOrientation();
+      if (major === 0 || major === 2) {
+        if (
+          orientation.get(0, 0) < 0 ||
+          orientation.get(0, 1) < 0 ||
+          orientation.get(0, 2) < 0
+        ) {
+          layerGroup.flipScaleX();
+        }
+
+        if (
+          orientation.get(1, 0) < 0 ||
+          orientation.get(1, 1) < 0 ||
+          orientation.get(1, 2) < 0
+        ) {
+          layerGroup.flipScaleY();
+        }
+
+        if (
+          orientation.get(2, 0) < 0 ||
+          orientation.get(2, 1) < 0 ||
+          orientation.get(2, 2) < 0
+        ) {
+          layerGroup.flipScaleZ();
         }
       } else {
-        console.log('ENHATCH MODIFICATIONS &&&&&');
-        const orientation = imageGeometry.getOrientation();
-        if (major === 0 || major === 2) {
-          if (
-            orientation.get(0, 0) < 0 ||
-            orientation.get(0, 1) < 0 ||
-            orientation.get(0, 2) < 0
-          ) {
-            layerGroup.flipScaleX();
-          }
-
-          if (
-            orientation.get(1, 0) < 0 ||
-            orientation.get(1, 1) < 0 ||
-            orientation.get(1, 2) < 0
-          ) {
-            layerGroup.flipScaleY();
-          }
-
-          if (
-            orientation.get(2, 0) < 0 ||
-            orientation.get(2, 1) < 0 ||
-            orientation.get(2, 2) < 0
-          ) {
-            layerGroup.flipScaleZ();
-          }
-        } else {
-          viewLayer.setScale(layerGroup.getScale());
-          if (typeof drawLayer !== 'undefined') {
-            drawLayer.setScale(layerGroup.getScale());
-          }
+        viewLayer.setScale(layerGroup.getScale());
+        if (typeof drawLayer !== 'undefined') {
+          drawLayer.setScale(layerGroup.getScale());
         }
       }
     } else {
