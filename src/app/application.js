@@ -1599,29 +1599,13 @@ export class App {
 
         if (initialOrientationReference.orientation === 'sagittal') {
           if (dataViewConfig.orientation === 'coronal') {
-            layerGroup.flipScaleZ();
+            layerGroup.flipScaleX();
             console.log('SAGITTAL => CORONAL &&&&&');
           } else if (dataViewConfig.orientation === 'axial') {
-            layerGroup.flipScaleZ();
+            layerGroup.flipScaleX();
             console.log('SAGITTAL => AXIAL &&&&&');
           }
         }
-
-        // layerGroup.flipScaleX();
-        // layerGroup.flipScaleZ();
-        // layerGroup.flipScaleZ();
-
-        // if (newMajor === 0) {
-        //   layerGroup.flipScaleX();
-        // }
-
-        // if (newMajor === 1) {
-        //   layerGroup.flipScaleY();
-        // }
-
-        // if (newMajor === 2) {
-        //   layerGroup.flipScaleZ();
-        // }
 
         if (major === 0 || major === 2) {
           if (
@@ -1629,7 +1613,6 @@ export class App {
             orientation.get(0, 1) < 0 ||
             orientation.get(0, 2) < 0
           ) {
-            console.log('FLIP SCALE X &&&&&&');
             layerGroup.flipScaleX();
           }
           if (
@@ -1637,7 +1620,6 @@ export class App {
             orientation.get(1, 1) < 0 ||
             orientation.get(1, 2) < 0
           ) {
-            console.log('FLIP SCALE Y &&&&&&');
             layerGroup.flipScaleY();
           }
           if (
@@ -1645,7 +1627,6 @@ export class App {
             orientation.get(2, 1) < 0 ||
             orientation.get(2, 2) < 0
           ) {
-            console.log('FLIP SCALE Z &&&&&&');
             layerGroup.flipScaleZ();
           }
         } else {
