@@ -1581,10 +1581,10 @@ export class App {
 
         if (initialOrientationReference.orientation === 'axial') {
           if (dataViewConfig.orientation === 'coronal') {
-            layerGroup.flipScaleZ();
+            layerGroup.flipScaleX();
             console.log('AXIAL => CORONAL &&&&&');
           } else if (dataViewConfig.orientation === 'sagittal') {
-            layerGroup.flipScaleZ();
+            layerGroup.flipScaleX();
             console.log('AXIAL => SAGITTAL &&&&&');
           }
         }
@@ -1622,30 +1622,30 @@ export class App {
         // }
 
         if (major === 0 || major === 2) {
-          if (
-            orientation.get(0, 0) < 0 ||
-            orientation.get(0, 1) < 0 ||
-            orientation.get(0, 2) < 0
-          ) {
-            console.log('FLIP SCALE X &&&&&&');
-            layerGroup.flipScaleX();
-          }
-          if (
-            orientation.get(1, 0) < 0 ||
-            orientation.get(1, 1) < 0 ||
-            orientation.get(1, 2) < 0
-          ) {
-            console.log('FLIP SCALE Y &&&&&&');
-            layerGroup.flipScaleY();
-          }
-          if (
-            orientation.get(2, 0) < 0 ||
-            orientation.get(2, 1) < 0 ||
-            orientation.get(2, 2) < 0
-          ) {
-            console.log('FLIP SCALE Z &&&&&&');
-            layerGroup.flipScaleZ();
-          }
+          // if (
+          //   orientation.get(0, 0) < 0 ||
+          //   orientation.get(0, 1) < 0 ||
+          //   orientation.get(0, 2) < 0
+          // ) {
+          //   console.log('FLIP SCALE X &&&&&&');
+          //   layerGroup.flipScaleX();
+          // }
+          // if (
+          //   orientation.get(1, 0) < 0 ||
+          //   orientation.get(1, 1) < 0 ||
+          //   orientation.get(1, 2) < 0
+          // ) {
+          //   console.log('FLIP SCALE Y &&&&&&');
+          //   layerGroup.flipScaleY();
+          // }
+          // if (
+          //   orientation.get(2, 0) < 0 ||
+          //   orientation.get(2, 1) < 0 ||
+          //   orientation.get(2, 2) < 0
+          // ) {
+          //   console.log('FLIP SCALE Z &&&&&&');
+          //   layerGroup.flipScaleZ();
+          // }
         } else {
           viewLayer.setScale(layerGroup.getScale());
           if (typeof drawLayer !== 'undefined') {
