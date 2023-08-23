@@ -1556,25 +1556,12 @@ export class App {
         const initialOrientationReference = this.#getOrientationReference(
           imageOrientationPatient
         );
-        // const orientation = this.#getCurrentOrientation(
-        //   imageOrientationPatient,
-        //   dataViewConfig.orientation
-        // );
-        // const orientation = imageGeometry.getOrientation();
 
         if (initialOrientationReference.orientation === 'axial') {
           if (dataViewConfig.orientation === 'coronal') {
             layerGroup.flipScaleZ();
           } else if (dataViewConfig.orientation === 'sagittal') {
             layerGroup.flipScaleZ();
-          }
-        }
-
-        if (initialOrientationReference.orientation === 'coronal') {
-          if (dataViewConfig.orientation === 'axial') {
-            console.log('CORONAL => AXIAL &&&&&');
-          } else if (dataViewConfig.orientation === 'sagittal') {
-            console.log('CORONAL => SAGITTAL &&&&&');
           }
         }
 
